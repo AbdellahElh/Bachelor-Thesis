@@ -7,45 +7,88 @@
 
 % Pas na deze inleidende paragraaf komt de eerste sectiehoofding.
 
-Dit hoofdstuk bevat je literatuurstudie. De inhoud gaat verder op de inleiding, maar zal het onderwerp van de bachelorproef *diepgaand* uitspitten. De bedoeling is dat de lezer na lezing van dit hoofdstuk helemaal op de hoogte is van de huidige stand van zaken (state-of-the-art) in het onderzoeksdomein. Iemand die niet vertrouwd is met het onderwerp, weet nu voldoende om de rest van het verhaal te kunnen volgen, zonder dat die er nog andere informatie moet over opzoeken \autocite{Pollefliet2011}.
+\section{Authentication in Digital Security}
+Authentication is the process of verifying the identity of users attempting to access digital systems or online services. 
+Commonly used methods include knowledge-based authentication (passwords), possession-based methods (tokens), and 
+biometric methods like fingerprints and facial recognition \autocite{Pant2022}. Passwords remain dominant due to 
+their simplicity and widespread acceptance, but face security issues including password reuse, phishing, and 
+brute-force attacks \autocite{Ophoff2021}. For users with cognitive or motor disabilities, these issues are 
+further complicated by difficulties in recalling or accurately inputting passwords \autocite{Rochford2014}.
 
-Je verwijst bij elke bewering die je doet, vakterm die je introduceert, enz.\ naar je bronnen. In \LaTeX{} kan dat met het commando \texttt{$\backslash${textcite\{\}}} of \texttt{$\backslash${autocite\{\}}}. Als argument van het commando geef je de ``sleutel'' van een ``record'' in een bibliografische databank in het Bib\LaTeX{}-formaat (een tekstbestand). Als je expliciet naar de auteur verwijst in de zin (narratieve referentie), gebruik je \texttt{$\backslash${}textcite\{\}}. Soms is de auteursnaam niet expliciet een onderdeel van de zin, dan gebruik je \texttt{$\backslash${}autocite\{\}} (referentie tussen haakjes). Dit gebruik je bv.~bij een citaat, of om in het bijschrift van een overgenomen afbeelding, broncode, tabel, enz. te verwijzen naar de bron. In de volgende paragraaf een voorbeeld van elk.
+\section{Accessibility Challenges in Authentication}
+Individuals with cognitive disabilities, such as memory disorders or conditions like dyslexia, often struggle with remembering complex passwords, resulting in frequent authentication failures and frustration \autocite{Farid2019, Ophoff2021}. Those with motor disabilities, including conditions like Parkinson's disease or cerebral palsy, face physical challenges in typing passwords accurately \autocite{Renaud2020}. The Web Content Accessibility Guidelines (WCAG) highlight the importance of designing authentication systems that minimize these cognitive and physical burdens \autocite{Brewer2023}.
 
-\textcite{Knuth1998} schreef een van de standaardwerken over sorteer- en zoekalgoritmen. Experten zijn het erover eens dat cloud computing een interessante opportuniteit vormen, zowel voor gebruikers als voor dienstverleners op vlak van informatietechnologie~\autocite{Creeger2009}.
+\vspace{4\baselineskip}
+\section{Face Recognition as a Biometric Solution}
+Biometric authentication, particularly facial recognition, is gaining popularity as it significantly reduces the cognitive and physical effort required by traditional password-based methods \autocite{Furnell2022}. 
+Unlike passwords, biometric data are unique physical attributes of an individual, providing an inherent security advantage by eliminating risks associated with knowledge-based authentication methods, 
+such as forgetting or sharing passwords \autocite{Pant2022}.
 
-Let er ook op: het \texttt{cite}-commando voor de punt, dus binnen de zin. Je verwijst meteen naar een bron in de eerste zin die erop gebaseerd is, dus niet pas op het einde van een paragraaf.
+Facial recognition stands out as particularly promising because it is intuitive, does not require manual dexterity, and can be seamlessly integrated into daily digital interactions \autocite{Bhatt2011}. However, biometric systems are not without limitations. Spoofing attacks, privacy concerns, and the requirement for consistent lighting and camera quality present technical and ethical considerations that must be carefully managed \autocite{Kuznetsov2024, Bahia2024}.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.8\textwidth]{grail.jpg}
-  \caption[Voorbeeld figuur.]{\label{fig:grail}Voorbeeld van invoegen van een figuur. Zorg altijd voor een uitgebreid bijschrift dat de figuur volledig beschrijft zonder in de tekst te moeten gaan zoeken. Vergeet ook je bronvermelding niet!}
-\end{figure}
+\section{Facial Recognition Technology}
+Facial recognition works by identifying and verifying individuals from digital images or videos using various algorithmic approaches, including traditional image processing methods and modern deep learning techniques. Notable algorithms include Haar cascades, Eigenfaces, Local Binary Patterns Histograms (LBPH), and Convolutional Neural Networks (CNNs) \autocite{ElSayed2015}. The evolution of deep learning, particularly CNN-based approaches, has significantly enhanced accuracy and reliability, making facial recognition robust even under challenging conditions like variations in lighting, angle, or facial expressions \autocite{Zhang2020}.
 
-\begin{listing}
-  \begin{minted}{python}
-    import pandas as pd
-    import seaborn as sns
+\subsection{Comparison of Facial Recognition Libraries}
 
-    penguins = sns.load_dataset('penguins')
-    sns.relplot(data=penguins, x="flipper_length_mm", y="bill_length_mm", hue="species")
-  \end{minted}
-  \caption[Voorbeeld codefragment]{Voorbeeld van het invoegen van een codefragment.}
-\end{listing}
+\subsubsection{OpenCV (Java)}
+OpenCV is a widely used open-source library offering classical computer vision techniques such as Haar cascades and LBPH. While effective in controlled environments, it typically requires server-side or desktop-based implementations, limiting its applicability for client-side web applications \autocite{Dominguez2017}.
 
-\lipsum[7-20]
+\subsubsection{face\_recognition in Python}  
+The face\_recognition library, built on dlib, is renowned for its accuracy and pre-trained deep learning models. \textcite{Zhang2020} highlight that it excels in applications requiring precision, utilizing techniques like CNN-based face encodings for high-quality results. However, its reliance on Python and backend processing makes it less suitable for client-side, browser-based implementations like those required in this project.
 
-\begin{table}
-  \centering
-  \begin{tabular}{lcr}
-    \toprule
-    \textbf{Kolom 1} & \textbf{Kolom 2} & \textbf{Kolom 3} \\
-    $\alpha$         & $\beta$          & $\gamma$         \\
-    \midrule
-    A                & 10.230           & a                \\
-    B                & 45.678           & b                \\
-    C                & 99.987           & c                \\
-    \bottomrule
-  \end{tabular}
-  \caption[Voorbeeld tabel]{\label{tab:example}Voorbeeld van een tabel.}
-\end{table}
+\subsubsection{face-api.js (JavaScript)}
+face-api.js, built on TensorFlow.js, runs entirely in the browser, providing a privacy-centric, client-side solution suitable for real-time applications \autocite{Vageele2024}. Its key benefits include privacy (no server-side data transfer), compatibility with modern web frameworks, and modularity for lightweight and efficient real-time processing. These features align closely with the project's emphasis on usability, accessibility, and security, making face-api.js the optimal choice for this research.
+
+\section{Security Considerations for Biometric Authentication}
+While facial recognition enhances accessibility, it also introduces specific security concerns. Common vulnerabilities include spoofing attacks using photos or video recordings and data privacy issues related to biometric data storage \autocite{Bowyer2006, Bahia2024}. Modern mitigation strategies include:
+\begin{itemize}
+\item \textbf{Liveness Detection:} Techniques to ensure the presence of a real, live user rather than a static image or video \autocite{Kuznetsov2024}.
+\item \textbf{Local Data Processing:} Client-side processing prevents the transmission of sensitive biometric data, enhancing privacy.
+\item \textbf{Multi-factor Authentication (MFA):} Combining biometric data with other authentication methods to provide layers of security and protect against vulnerabilities inherent in single-method authentication systems \autocite{Furnell2022}.
+\end{itemize}
+
+\section{Current Limitations in Password Managers}
+Password managers simplify password management by securely storing and auto-filling credentials but commonly rely on a master password, perpetuating cognitive and motor accessibility issues. This approach is problematic for users who struggle with memory recall or precise typing \autocite{IALabs2024}. While MFA offers increased security, it often introduces additional complexity that further burdens users with disabilities. Current systems have limited inclusivity and accessibility, reinforcing the need for more intuitive solutions.
+
+\section{Cryptographic Security in Password Managers}
+Secure storage of credentials is fundamental in password management. Password managers typically employ cryptographic algorithms to protect user data, such as bcrypt, PBKDF2, and Argon2. Bcrypt, widely adopted in JavaScript-based solutions, offers robust resistance to brute-force attacks by incorporating computationally intensive hashing processes \autocite{Pant2022}. This thesis utilizes bcrypt due to its proven reliability, widespread adoption, and compatibility with JavaScript-based web applications.
+
+\section{Usability and Accessibility Standards}
+Accessibility in digital solutions adheres to guidelines such as WCAG, which outline best practices for minimizing cognitive load, ensuring interface clarity, and reducing physical input requirements. Adopting these standards ensures the password manager prototype remains usable for individuals with various disabilities \autocite{Brewer2023}. Inclusive design principles further emphasize the need to involve users with disabilities in the development process to validate and refine usability \autocite{Lazar2015}.
+
+
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=0.8\textwidth]{grail.jpg}
+%   \caption[Voorbeeld figuur.]{\label{fig:grail}Voorbeeld van invoegen van een figuur. Zorg altijd voor een uitgebreid bijschrift dat de figuur volledig beschrijft zonder in de tekst te moeten gaan zoeken. Vergeet ook je bronvermelding niet!}
+% \end{figure}
+
+% \begin{listing}
+%   \begin{minted}{python}
+%     import pandas as pd
+%     import seaborn as sns
+
+%     penguins = sns.load_dataset('penguins')
+%     sns.relplot(data=penguins, x="flipper_length_mm", y="bill_length_mm", hue="species")
+%   \end{minted}
+%   \caption[Voorbeeld codefragment]{Voorbeeld van het invoegen van een codefragment.}
+% \end{listing}
+
+% \lipsum[7-20]
+
+% \begin{table}
+%   \centering
+%   \begin{tabular}{lcr}
+%     \toprule
+%     \textbf{Kolom 1} & \textbf{Kolom 2} & \textbf{Kolom 3} \\
+%     $\alpha$         & $\beta$          & $\gamma$         \\
+%     \midrule
+%     A                & 10.230           & a                \\
+%     B                & 45.678           & b                \\
+%     C                & 99.987           & c                \\
+%     \bottomrule
+%   \end{tabular}
+%   \caption[Voorbeeld tabel]{\label{tab:example}Voorbeeld van een tabel.}
+% \end{table}
 
