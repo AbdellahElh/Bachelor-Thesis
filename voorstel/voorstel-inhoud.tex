@@ -7,78 +7,177 @@
 
 %\paragraph{Opmerking}
 
-% Dit voorstel is gebaseerd op het onderzoeksvoorstel dat werd geschreven in het
-% kader van het vak Research Methods dat ik (vorig/dit) academiejaar heb
-% uitgewerkt (met medesturent VOORNAAM NAAM als mede-auteur).
-% 
 
-\section{Inleiding}%
-\label{sec:inleiding}
+\bigskip
 
-Waarover zal je bachelorproef gaan? Introduceer het thema en zorg dat volgende zaken zeker duidelijk aanwezig zijn:
+\vspace{2\baselineskip} % skip 2 lines
+\paragraph{Remark}
 
-\begin{itemize}
-  \item kaderen thema
-  \item de doelgroep
-  \item de probleemstelling en (centrale) onderzoeksvraag
-  \item de onderzoeksdoelstelling
-\end{itemize}
+I'm also taking up the bachelor's thesis this year. The content of this research proposal also serves as the subject for my bachelor thesis. My promoter is Mr. De Witte Andreas
 
-Denk er aan: een typische bachelorproef is \textit{toegepast onderzoek}, wat betekent dat je start vanuit een concrete probleemsituatie in bedrijfscontext, een \textbf{casus}. Het is belangrijk om je onderwerp goed af te bakenen: je gaat voor die \textit{ene specifieke probleemsituatie} op zoek naar een goede oplossing, op basis van de huidige kennis in het vakgebied.
+This proposal includes imporvements based on feedback and results found in the original proposal. The topic was changed to focus on a password manager, as the original findings showed that limiting accessible authentication to a single website would waste its potential. The title was revised, and the main research question was added to the abstract for clarity and alignment with guidelines.
+\clearpage
 
-De doelgroep moet ook concreet en duidelijk zijn, dus geen algemene of vaag gedefinieerde groepen zoals \emph{bedrijven}, \emph{developers}, \emph{Vlamingen}, enz. Je richt je in elk geval op it-professionals, een bachelorproef is geen populariserende tekst. Eén specifiek bedrijf (die te maken hebben met een concrete probleemsituatie) is dus beter dan \emph{bedrijven} in het algemeen.
+\section{Introduction}%
+\label{sec:Introduction}
+Authentication is a critical aspect of web security, yet it poses significant challenges for users with disabilities, such as motor or cognitive impairments. Traditional password-based systems often require users to create, remember, and enter complex passwords, a process that can be both frustrating and restrictive for individuals with these challenges. As digital services expand, the need for accessible and secure authentication methods has become increasingly urgent.
 
-Formuleer duidelijk de onderzoeksvraag! De begeleiders lezen nog steeds te veel voorstellen waarin we geen onderzoeksvraag terugvinden.
+This research focuses on improving password management and authentication for users with disabilities by integrating face recognition technology. The proposed solution is an accessible password manager that replaces the traditional master password with face recognition for authentication. This innovative approach aims to enhance both usability and security, helping users with disabilities to  securely manage their digital credentials.
 
-Schrijf ook iets over de doelstelling. Wat zie je als het concrete eindresultaat van je onderzoek, naast de uitgeschreven scriptie? Is het een proof-of-concept, een rapport met aanbevelingen, \ldots Met welk eindresultaat kan je je bachelorproef als een succes beschouwen?
+The research is guided by the question: *How can face recognition technology be effectively integrated into a password manager to improve accessibility for individuals with cognitive and motor disabilities?* To address this, the following subquestions will be explored:
 
+\begin{enumerate}
+\item What specific accessibility challenges do individuals with cognitive and motor disabilities face in traditional password-based authentication systems?
+\item How effective is face recognition technology as an alternative authentication method for users with disabilities?
+\item What are the technical requirements and potential obstacles in integrating face recognition technology into a password manager?
+\item What are the security implications of using face recognition technology compared to traditional password-based methods?
+\end{enumerate}
+
+The objective of this research is to design and develop a proof-of-concept password manager that incorporates face recognition authentication. Research will be conducted to identify the most suitable modern web development frameworks and technologies for implementing robust security practices, including local encryption of passwords. A prototype will be built and tested to evaluate its ease of use and accessibility for individuals with disabilities.\section{Literature Review}%
+
+\vspace{2\baselineskip}
 %---------- Stand van zaken ---------------------------------------------------
 
 \section{Literatuurstudie}%
-\label{sec:literatuurstudie}
+\label{sec:literature review}
 
-Hier beschrijf je de \emph{state-of-the-art} rondom je gekozen onderzoeksdomein, d.w.z.\ een inleidende, doorlopende tekst over het onderzoeksdomein van je bachelorproef. Je steunt daarbij heel sterk op de professionele \emph{vakliteratuur}, en niet zozeer op populariserende teksten voor een breed publiek. Wat is de huidige stand van zaken in dit domein, en wat zijn nog eventuele open vragen (die misschien de aanleiding waren tot je onderzoeksvraag!)?
+\subsection{Authentication in Web Security}
+Authentication is a critical aspect of web security and digital accessibility, essential for verifying the identity of users accessing online services. It typically falls into three categories: knowledge-based (something you know, e.g., passwords), possession-based (something you have, e.g., security tokens), and biometric-based (something you are, e.g., fingerprint or facial recognition) \autocite{Pant2022}. Each of these methods comes with distinct advantages and trade-offs.\\
+Passwords, the most common form of knowledge-based authentication, are known for their simplicity and widespread adoption. However, they are often a source of frustration for users, particularly those with cognitive disabilities, due to their reliance on memory and typing ability. This leads to challenges such as password fatigue, difficulty in managing multiple complex passwords, and susceptibility to password-related attacks like phishing and brute force \autocite{Rochford2014}. Additionally, passwords can be easily forgotten, shared, or written down, further compromising their effectiveness as a secure authentication method.
 
-Je mag de titel van deze sectie ook aanpassen (literatuurstudie, stand van zaken, enz.). Zijn er al gelijkaardige onderzoeken gevoerd? Wat concluderen ze? Wat is het verschil met jouw onderzoek?
+Biometric authentication offers a promising alternative by eliminating the need for memory recall or physical input. As noted by 	extcite{Sarkar2020}, biometric systems can improve user convenience and accessibility while reducing the cognitive load associated with traditional passwords.
 
-Verwijs bij elke introductie van een term of bewering over het domein naar de vakliteratuur, bijvoorbeeld~\autocite{Hykes2013}! Denk zeker goed na welke werken je refereert en waarom.
+\subsection{Accessibility and Usability Concerns}
+\textcite{Furnell2022} emphasize that ensuring accessibility in authentication systems is crucial, particularly for individuals with cognitive and motor disabilities who face significant barriers in traditional password-based systems. The Web Content Accessibility Guidelines (WCAG) provide a framework for making web content accessible to people with various disabilities, including cognitive, learning, and motor impairments \autocite{Brewer2023}. However, many existing authentication methods fail to adequately address the specific needs of these users.
+For instance, \textcite{Farid2019} highlight that users with cognitive impairments, such as memory difficulties or conditions like dementia, often struggle with recalling complex passwords, leading to frequent lockouts and frustration. Similarly, individuals with motor disabilities, such as tremors or reduced mobility, may experience challenges typing long, secure passwords \autocite{Renaud2020}. These issues underline the need for authentication systems that minimize cognitive load and physical effort.
+Facial recognition technology offers a hands-free, memory-free alternative, reducing both cognitive and physical burdens \autocite{Bhatt2011}. While facial recognition has clear potential for improving accessibility, a critical question remains: How can facial recognition technology address the specific accessibility challenges faced by individuals with cognitive and motor disabilities while maintaining high security and privacy standards?
+\textcite{Lazar2015} advocate for inclusive design in authentication systems, emphasizing the importance of user-centered solutions. Facial recognition systems can empower users with cognitive and motor disabilities by providing a more accessible and intuitive way to authenticate securely \autocite{Furnell2022}.
 
-Draag zorg voor correcte literatuurverwijzingen! Een bronvermelding hoort thuis \emph{binnen} de zin waar je je op die bron baseert, dus niet er buiten! Maak meteen een verwijzing als je gebruik maakt van een bron. Doe dit dus \emph{niet} aan het einde van een lange paragraaf. Baseer nooit teveel aansluitende tekst op eenzelfde bron.
+\subsection{Facial Recognition Technology}
+Facial recognition, a widely adopted form of biometric authentication, stands out for its non-intrusive nature and seamless integration with modern technology \autocite{Furnell2022}. Unlike traditional passwords, facial recognition cannot be forgotten, easily shared, or written down, enhancing both security and user convenience. This technology enables faster and more efficient authentication processes, particularly in environments where frequent logins are required.
 
-Als je informatie over bronnen verzamelt in JabRef, zorg er dan voor dat alle nodige info aanwezig is om de bron terug te vinden (zoals uitvoerig besproken in de lessen Research Methods).
+Additionally, facial recognition plays a significant role in multi-factor authentication systems and can be integrated across various platforms, including smartphones, ATMs, and security checkpoints \autocite{Gorman2003}. Its versatility ensures that it meets the needs of both personal and enterprise-level security requirements.
 
-% Voor literatuurverwijzingen zijn er twee belangrijke commando's:
-% \autocite{KEY} => (Auteur, jaartal) Gebruik dit als de naam van de auteur
-%   geen onderdeel is van de zin.
-% \textcite{KEY} => Auteur (jaartal)  Gebruik dit als de auteursnaam wel een
-%   functie heeft in de zin (bv. ``Uit onderzoek door Doll & Hill (1954) bleek
-%   ...'')
+According to \textcite{Gorman2003}, facial recognition also provides robust protection against common password vulnerabilities. Since it does not rely on knowledge-based credentials, it is inherently resistant to attacks such as credential stuffing and password spraying, which exploit reused or weak passwords. This makes it a reliable alternative for organizations seeking to improve security without compromising user experience.
 
-Je mag deze sectie nog verder onderverdelen in subsecties als dit de structuur van de tekst kan verduidelijken.
+\subsection{Security Implications of Facial Recognition}
+While facial recognition offers enhanced accessibility and ease of use, it also introduces security and privacy concerns. The potential for spoofing attacks and data privacy issues must be carefully addressed to ensure the robustness of facial recognition systems \autocite{Bowyer2006,Bahia2024}. \\
+
+\textcite{Kuznetsov2024} discuss how techniques such as liveness detection and multi-factor authentication can mitigate some of these risks.
+
+\subsection{Current Limitations in Password Managers}
+
+\textcite{Ophoff2021} explain that password managers aim to simplify credential management by securely storing and retrieving complex passwords. However, they often fall short in addressing the needs of users with cognitive and motor disabilities. Many rely on text-based master passwords, which can be difficult for users with memory challenges or motor impairments, as these systems demand both precise typing and password recall.
+
+\textcite{IALabs2024} note that for users with cognitive disabilities, forgetting a master password often leads to frustration and lockouts. Those with motor disabilities may struggle with typing or navigating small user interface elements, further limiting accessibility. While some password managers offer multi-factor authentication (MFA), the additional steps, such as using external devices or entering codes, often create new barriers rather than reducing them.
+
+These limitations highlight the lack of inclusivity in existing password management systems. \textcite{Distante2022} suggest that by leveraging facial recognition, authentication can become both hands-free and memory-free, reducing cognitive and physical demands and making password managers more accessible for all users.
+\subsection{Comparison of Facial Recognition Tools}
+
+\subsubsection{OpenCV in Java}  
+OpenCV (Open Source Computer Vision Library) is a versatile library for implementing facial recognition in Java, offering tools like Haar cascades and LBPH for face detection and recognition \autocite{Dominguez2017}. LBPH, in particular, performs well under varying lighting and expressions, making it a robust option for real-time applications. However, OpenCV’s use in Java is less relevant for web-based systems, as it requires server-side or desktop deployment, limiting its compatibility with modern browser-based solutions.
+
+\subsubsection{face\_recognition in Python}  
+The face\_recognition library, built on dlib, is renowned for its accuracy and pre-trained deep learning models. \textcite{Zhang2020} highlight that it excels in applications requiring precision, utilizing techniques like CNN-based face encodings for high-quality results. However, its reliance on Python and backend processing makes it less suitable for client-side, browser-based implementations like those required in this project.
+
+\subsubsection{face-api.js in JavaScript}  
+face-api.js, built on TensorFlow.js, is the most suitable library for this project due to its ability to run entirely in the browser, eliminating the need for server-side data processing. This privacy-focused approach aligns with the project’s emphasis on safeguarding user data \autocite{Vageele2024}. Additionally, its support for MobileNetV1-based models enables efficient real-time face detection and embeddings in lightweight applications. Its modular design and compatibility with modern web technologies make it an ideal choice for building accessible and secure password managers.
+
 
 %---------- Methodologie ------------------------------------------------------
-\section{Methodologie}%
-\label{sec:methodologie}
+\section{Methodology} 
+\label{sec:methodology}
 
-Hier beschrijf je hoe je van plan bent het onderzoek te voeren. Welke onderzoekstechniek ga je toepassen om elk van je onderzoeksvragen te beantwoorden? Gebruik je hiervoor literatuurstudie, interviews met belanghebbenden (bv.~voor requirements-analyse), experimenten, simulaties, vergelijkende studie, risico-analyse, PoC, \ldots?
+\subsection{Literature Study and Tool Selection}
+A literature review will be conducted to identify the difficulties individuals with cognitive and motor disabilities face with traditional password-based systems. The review will also explore how the proof of concept (PoC) can help minimize these challenges for the affected users.
 
-Valt je onderwerp onder één van de typische soorten bachelorproeven die besproken zijn in de lessen Research Methods (bv.\ vergelijkende studie of risico-analyse)? Zorg er dan ook voor dat we duidelijk de verschillende stappen terug vinden die we verwachten in dit soort onderzoek!
+Following the literature study, preliminary research considered alternative tools, such as OpenCV (Java) and face\_recognition (Python), but identified \textbf{face-api.js} as the primary candidate for the following:
+\begin{itemize}
+    \item \textbf{Privacy:} Runs entirely in the browser, eliminating the need to transmit user data to external servers.
+    \item \textbf{Compatibility:} Supports modern web technologies and integrates seamlessly with JavaScript frameworks.
+    \item \textbf{Modularity:} Lightweight design and deep learning capabilities make it suitable for real-time applications.
+\end{itemize}
+\textbf{Time Estimate:} 2 weeks. \\  
+\textbf{Deliverable:} Comparative analysis of accessibility challenges and face recognition tools.
 
-Vermijd onderzoekstechnieken die geen objectieve, meetbare resultaten kunnen opleveren. Enquêtes, bijvoorbeeld, zijn voor een bachelorproef informatica meestal \textbf{niet geschikt}. De antwoorden zijn eerder meningen dan feiten en in de praktijk blijkt het ook bijzonder moeilijk om voldoende respondenten te vinden. Studenten die een enquête willen voeren, hebben meestal ook geen goede definitie van de populatie, waardoor ook niet kan aangetoond worden dat eventuele resultaten representatief zijn.
 
-Uit dit onderdeel moet duidelijk naar voor komen dat je bachelorproef ook technisch voldoen\-de diepgang zal bevatten. Het zou niet kloppen als een bachelorproef informatica ook door bv.\ een student marketing zou kunnen uitgevoerd worden.
+\subsection{Prototype Development}
+The first prototype will be a web-based password manager developed using a JavaScript framework (potentially with TypeScript). Its key features include:
+\begin{itemize}
+    \item \textbf{Face Authentication:} Users will authenticate by scanning their face, replacing the need for master passwords.
+    \item \textbf{Credential Management:} Securely store and manage email-password pairs.
+    \item \textbf{Password Generation:} Automatically generate strong passwords to enhance security.
+    \item \textbf{Accessible Interface:} Prioritize usability for individuals with cognitive and motor disabilities by adhering to WCAG guidelines.
+\end{itemize}
+\textbf{Time Estimate:} 4 weeks. \\  
+\textbf{Deliverable:} Initial web-based password manager prototype.
 
-Je beschrijft ook al welke tools (hardware, software, diensten, \ldots) je denkt hiervoor te gebruiken of te ontwikkelen.
 
-Probeer ook een tijdschatting te maken. Hoe lang zal je met elke fase van je onderzoek bezig zijn en wat zijn de concrete \emph{deliverables} in elke fase?
+\subsection{User Testing and Validation}
+User testing will involve individuals from the target group to evaluate the prototype’s accessibility and usability. The testing process will focus on:
+\begin{itemize}
+    \item \textbf{Ease of Use:} Assess how intuitive the interface is for the target group.
+    \item \textbf{Accessibility:} Measure the reduction in cognitive and physical effort required for authentication.
+    \item \textbf{Facial Recognition Accuracy:} Validate the reliability of the facial recognition process under various conditions.
+    \item \textbf{User Feedback:} Gather qualitative insights to refine the system.
+\end{itemize}
+\textbf{Time Estimate:} 2 weeks. \\  
+\textbf{Deliverable:} User testing results, security analysis, and feedback report.
 
+
+\subsection{Future Expansion}
+If the browser-based prototype proves successful, the next plan is to
+package it as an \textbf{offline-first Chrome extension}.  
+SQLite's embedded design keeps the entire password vault in a single file
+bundled with the extension, so no external server is required—precisely why
+SQLite was chosen.  This direction will let users install the password manager
+instantly from the Chrome Web Store and keep their credentials local while
+still benefiting from auto-fill and seamless updates.
+
+Planned next steps include:
+\begin{itemize}
+  \item Adapting the current React/TypeScript codebase to Chrome Extension
+        APIs (manifest v3) for secure content-script injection and
+        background tasks.
+  \item Implementing permission-scoped access to web pages for auto-fill
+        while preserving privacy.
+  \item Testing storage limits and performance of the SQLite WASM build in
+        Chrome to ensure smooth operation on low-end devices.
+  \item Exploring optional cloud backup and multi-device sync as opt-in
+        features, keeping the default experience fully offline.
+\end{itemize}
 %---------- Verwachte resultaten ----------------------------------------------
-\section{Verwacht resultaat, conclusie}%
-\label{sec:verwachte_resultaten}
 
-Hier beschrijf je welke resultaten je verwacht. Als je metingen en simulaties uitvoert, kan je hier al mock-ups maken van de grafieken samen met de verwachte conclusies. Benoem zeker al je assen en de onderdelen van de grafiek die je gaat gebruiken. Dit zorgt ervoor dat je concreet weet welk soort data je moet verzamelen en hoe je die moet meten.
+\clearpage
+\section{Expected Results}% 
+\label{sec:expected-results}
 
-Wat heeft de doelgroep van je onderzoek aan het resultaat? Op welke manier zorgt jouw bachelorproef voor een meerwaarde?
+The anticipated outcomes of this research focus on the practical benefits of integrating facial recognition into a web-based password manager. These include:
 
-Hier beschrijf je wat je verwacht uit je onderzoek, met de motivatie waarom. Het is \textbf{niet} erg indien uit je onderzoek andere resultaten en conclusies vloeien dan dat je hier beschrijft: het is dan juist interessant om te onderzoeken waarom jouw hypothesen niet overeenkomen met de resultaten.
+\begin{enumerate}
+    \item \textbf{Improved Accessibility and User Experience}:  
+    By replacing traditional passwords with facial recognition, the solution is expected to reduce frustrations from forgotten passwords or failed logins. This approach will lower cognitive and physical effort, making authentication more inclusive for individuals with cognitive and motor disabilities.
+
+    \item \textbf{Enhanced Protection Against Unauthorized Access}:  
+    Facial recognition reduces the risks associated with password theft, phishing, or brute-force attacks. By relying on biometric data instead of text-based passwords, the solution offers an additional layer of security, ensuring that only the intended user can access sensitive credentials.
+\end{enumerate}
+
+
+\section{Discussion and Expected Conclusion}% 
+\label{sec:discussion-conclusion}
+
+The research is expected to conclude that facial recognition can be an ideal solution, particularly for individuals with cognitive and motor disabilities. By addressing the challenges of traditional password management, this solution aims to provide a hands-free, intuitive alternative that reduces both cognitive and physical effort.
+
+The proposed approach improves digital accessibility by eliminating the need for typing and password recall. This allows individuals with disabilities to navigate online systems more independently, enhancing their overall user experience and confidence.
+
+Beyond its immediate practical benefits, this study demonstrates how accessibility improvements can coexist with robust security. By focusing on inclusive design and user-centered principles, the research contributes to the growing field of accessible cybersecurity. It serves as a foundation for developing future technologies that balance usability, security, and scalability.
+
+If the proof of concept (PoC) proves successful, further research can explore:  
+\begin{itemize}
+    \item Expanding the solution to desktop applications or cross-platform tools,  
+    \item Enhancing scalability, performance, and security,  
+    \item Exploring commercialization opportunities to reach a broader audience.  
+\end{itemize}
+
+Ultimately, this research advances understanding in accessible cybersecurity while offering practical, inclusive benefits to underrepresented user groups. It highlights the potential for technology to create more equitable digital experiences for all users.
 
