@@ -19,6 +19,9 @@ further complicated by difficulties in recalling or accurately inputting passwor
 Individuals with cognitive disabilities, such as memory disorders or conditions like dyslexia, often struggle with remembering complex passwords, resulting in frequent authentication failures and frustration \autocite{Farid2019, Ophoff2021}. Those with motor disabilities, including conditions like Parkinson's disease or cerebral palsy, face physical challenges in typing passwords accurately \autocite{Renaud2020}. The Web Content Accessibility Guidelines (WCAG) highlight the importance of designing authentication systems that minimize these cognitive and physical burdens \autocite{Brewer2023}.
 
 \vspace{4\baselineskip}
+\section{Facial Recognition Technology}
+Facial recognition works by identifying and verifying individuals from digital images or videos using various algorithmic approaches, including traditional image processing methods and modern deep learning techniques. Notable algorithms include Haar cascades, Eigenfaces, Local Binary Patterns Histograms (LBPH), and Convolutional Neural Networks (CNNs) \autocite{ElSayed2015}. The evolution of deep learning, particularly CNN-based approaches, has significantly enhanced accuracy and reliability, making facial recognition robust even under challenging conditions like variations in lighting, angle, or facial expressions \autocite{Zhang2020}.
+
 \section{Face Recognition as a Biometric Solution}
 Biometric authentication, particularly facial recognition, is gaining popularity as it significantly reduces the cognitive and physical effort required by traditional password-based methods \autocite{Furnell2022}. 
 Unlike passwords, biometric data are unique physical attributes of an individual, providing an inherent security advantage by eliminating risks associated with knowledge-based authentication methods, 
@@ -26,8 +29,6 @@ such as forgetting or sharing passwords \autocite{Pant2022}.
 
 Facial recognition stands out as particularly promising because it is intuitive, does not require manual dexterity, and can be seamlessly integrated into daily digital interactions \autocite{Bhatt2011}. However, biometric systems are not without limitations. Spoofing attacks, privacy concerns, and the requirement for consistent lighting and camera quality present technical and ethical considerations that must be carefully managed \autocite{Kuznetsov2024, Bahia2024}.
 
-\section{Facial Recognition Technology}
-Facial recognition works by identifying and verifying individuals from digital images or videos using various algorithmic approaches, including traditional image processing methods and modern deep learning techniques. Notable algorithms include Haar cascades, Eigenfaces, Local Binary Patterns Histograms (LBPH), and Convolutional Neural Networks (CNNs) \autocite{ElSayed2015}. The evolution of deep learning, particularly CNN-based approaches, has significantly enhanced accuracy and reliability, making facial recognition robust even under challenging conditions like variations in lighting, angle, or facial expressions \autocite{Zhang2020}.
 
 \subsection{Comparison of Facial Recognition Libraries}
 
@@ -50,6 +51,64 @@ While facial recognition enhances accessibility, it also introduces specific sec
 
 \section{Current Limitations in Password Managers}
 Password managers simplify password management by securely storing and auto-filling credentials but commonly rely on a master password, perpetuating cognitive and motor accessibility issues. This approach is problematic for users who struggle with memory recall or precise typing \autocite{IALabs2024}. While MFA offers increased security, it often introduces additional complexity that further burdens users with disabilities. Current systems have limited inclusivity and accessibility, reinforcing the need for more intuitive solutions.
+
+\section{Database Options for Client\textendash Side Password Storage}
+\label{sec:db-options}
+
+A password manager must choose a local datastore that balances footprint,
+offline capability, security, and future synchronisation needs.  The five
+candidates below are summarised with literature references and official
+documentation links; each paragraph is kept within seven lines for brevity.
+
+\subsection*{SQLite}
+\textcite{Gaffney2022} show that SQLite embeds the entire ACID-compliant
+engine in a single file of only a few-hundred-kB, requiring no server
+process.  Its dynamic typing allows flexible schemas \autocite{Corovcak2025}.
+Because it lacks native user authentication, security depends on OS file
+permissions or extensions such as SQLCipher \autocite{Corovcak2025}.
+Official documentation confirms the zero-config model and SQL feature set
+\autocite{sqlLiteDoc2025}.  These traits make SQLite ideal for an offline,
+single-device password vault, provided the file is encrypted at rest.
+
+\subsection*{PostgreSQL}
+PostgreSQL's client-server design provides robust concurrency and rich SQL
+features after 35-years of development \autocite{Gkamas2022}.  It supports
+role-based access control and TLS for data in transit, yet the community
+edition offers no built-in at-rest encryption—administrators must use
+\textit{pgcrypto} or file-system measures \autocite{Crunchy2024,
+PostgreSQL2025}.  A local instance typically consumes hundreds of-MB of RAM,
+which is heavy for a mobile vault.  Hence PostgreSQL is secure and scalable,
+but over-provisioned for a single-user client.
+
+\subsection*{MongoDB}
+MongoDB stores JSON-like documents in flexible collections and scales
+horizontally \autocite{Miryala2024}.  A \texttt{mongod} process needs 1-2-GB
+RAM even for modest use \autocite{Dahunsi2021}.  Community builds provide
+authentication and TLS, yet encryption at rest is Enterprise-only
+\autocite{PrismaMongoEnc, MongoDB2025}, so disk encryption or field-level
+crypto is required.  Misconfiguration has repeatedly exposed databases,
+underscoring the need for hardened defaults \autocite{SqlLite2025}.  The
+server footprint makes MongoDB ill-suited to a purely offline desktop
+password manager.
+
+\subsection*{Couchbase Lite}
+Couchbase Lite embeds a document store inside the app and syncs through
+Sync Gateway when online \autocite{Pal2016}.  Its metadata inflates on-disk
+size versus SQLite, yet runtime demands remain mobile-friendly
+\autocite{Gkamas2022}.  The Enterprise build supports 256-bit AES encryption
+of the local DB \autocite{CouchbaseEncryption, CouchbaseDoc2025}.  Because it
+executes in the app's sandbox, further authentication is handled by the host
+application.  These qualities make Couchbase Lite attractive for an
+offline-first vault that may later sync across devices.
+
+\subsection*{Firebase Cloud Firestore}
+Firestore is a serverless NoSQL service that caches data locally and
+synchronises transparently once connectivity returns \autocite{FirebaseDoc2025}.
+Security combines Firebase Authentication with declarative Firestore Rules,
+while Google encrypts data in transit and at rest \autocite{FirebaseSecurity2025}.
+This offloads database maintenance but requires Internet access for initial
+login and long-term storage.  Firestore therefore suits a multi-device,
+cloud-centric password manager but cedes full data custody to Google.
 
 \section{Cryptographic Security in Password Managers}
 Secure storage of credentials is fundamental in password management. Password managers typically employ cryptographic algorithms to protect user data, such as bcrypt, PBKDF2, and Argon2. Bcrypt, widely adopted in JavaScript-based solutions, offers robust resistance to brute-force attacks by incorporating computationally intensive hashing processes \autocite{Pant2022}. This thesis utilizes bcrypt due to its proven reliability, widespread adoption, and compatibility with JavaScript-based web applications.

@@ -5,45 +5,65 @@
 \chapter{\IfLanguageName{dutch}{Methodologie}{Methodology}}%
 \label{ch:methodologie}
 
-The development process of this project was structured into distinct stages, each designed to achieve specific objectives, produce clear deliverables, and employ targeted research methods. The completed stages are detailed below.
+The development process for this project is structured into distinct stages, each pursuing specific objectives, generating clear deliverables, and applying targeted research methods. The stages appear below.
 
-\subsection{Tool Selection}
-The goal of this stage was to select an appropriate facial recognition tool optimized for accessibility, security, and ease of integration. Following an extensive literature review and comparative analysis, \textbf{face-api.js} was chosen as the primary tool, primarily based on the following criteria:
+\section{Tool Selection}
+This stage selects a facial-recognition tool that balances accessibility, security and ease of integration.  
+Following an extensive literature review and comparative analysis, the project adopts \textbf{face-api.js} based on:
+
 \begin{itemize}
-\item \textbf{Privacy:} Face-api.js processes data entirely client-side, thereby eliminating the need to transmit sensitive biometric information externally and enhancing user privacy.
-\item \textbf{Compatibility:} The library integrates smoothly with modern JavaScript frameworks, facilitating straightforward development and reducing complexity.
-\item \textbf{Real-time Performance:} Its lightweight and modular architecture allows efficient real-time operation, making it particularly suitable for accessibility-focused web applications.
+  \item \textbf{Privacy:} Face-api.js processes all data on the client, eliminating external transmission of biometric information and strengthening user privacy.
+  \item \textbf{Compatibility:} The library integrates smoothly with modern 
+  Java\-Script frameworks, streamlining development and reducing complexity.
+  \item \textbf{Real-time performance:} Its lightweight, modular architecture enables efficient real-time operation—an essential feature for accessibility-centred web applications.
 \end{itemize}
 
-Alternatives such as \textbf{OpenCV (Java)} and \textbf{face\_recognition (Python)} were considered and benchmarked, but ultimately face-api.js was selected due to its superior balance of performance, ease of integration, and suitability for client-side web deployment.
+Alternatives such as \textbf{OpenCV (Java)} and \textbf{face\_recognition (Python)} are considered and benchmarked, yet face-api.js ultimately offers the best balance of performance, integration effort and suitability for client-side deployment.
 
-\subsection{Prototype Development}
-The primary purpose of this phase is the development of a fully functional web-based prototype password manager designed specifically to address usability and accessibility concerns for individuals with cognitive and motor disabilities. The prototype is being developed using TypeScript for enhanced maintainability and robustness. Key deliverables completed in this stage include:
+\section{Prototype Development}
+This phase develops a fully functional, web-based password manager that addresses usability and accessibility barriers for individuals with cognitive and motor disabilities. The prototype relies on TypeScript to maximise maintainability and robustness. Key deliverables in this stage include:
+
 \begin{itemize}
-\item \textbf{Face Authentication Module:} Users authenticate effortlessly through facial recognition, removing the complexity associated with traditional textual passwords.
-\item \textbf{Credential Management System:} Implementation of secure methods for storing and retrieving user credentials.
-\item \textbf{Password Generation Tool:} An integrated mechanism that automatically generates robust, unique passwords.
-\item \textbf{Accessible User Interface (UI):} Designed according to Web Content Accessibility Guidelines (WCAG), ensuring ease of use, particularly for users facing cognitive or motor challenges.
+  \item \textbf{Face-authentication module:} Users authenticate through facial recognition, removing the burden of remembering complex textual passwords.
+  \item \textbf{Credential-management system:} Secure mechanisms store and retrieve user credentials.
+  \item \textbf{Password-generation tool:} An integrated utility produces robust, unique passwords automatically.
+  \item \textbf{Accessible user interface (UI):} The design follows Web Content Accessibility Guidelines (WCAG) to ensure usability—especially for users facing cognitive or motor challenges.
 \end{itemize}
 
-The development followed an iterative Agile methodology, allowing regular refinements based on intermediate testing and feedback from preliminary user evaluations.
+Development follows an iterative Agile methodology, enabling continuous refinement through intermediate testing and preliminary user feedback.
 
-\subsection{Database Selection}
-Selecting an efficient and secure database solution to manage user credentials was a crucial component of the project. After evaluating various database options against performance, security, scalability, and ease of integration criteria, the final selection included:
+\section{Database Selection}
+Choosing an efficient, secure database to manage user credentials forms a crucial component of the project. After evaluating multiple options against performance, security, scalability and integration criteria, the project currently employs:
+
 \begin{itemize}
-\item \textbf{SQLite:} Chosen for the initial prototype due to its simplicity, lightweight nature, and suitability for local, client-side storage.
-\item \textbf{MongoDB:} Assessed for its scalability, flexibility, and potential to handle more complex data structures and larger datasets in future expanded implementations.
+  \item \textbf{SQLite:} Adopted for the initial prototype because of its simplicity, lightweight footprint and suitability for local client-side storage.
+  \item \textbf{PostgreSQL:} Evaluated for future scenarios that demand greater scalability, flexible data models and larger datasets.
 \end{itemize}
 
-The database solutions were validated through performance tests and security assessments conducted during the prototype development phase.
+Both database solutions undergo performance tests and security assessments during prototype development.
 
+\section{Future Expansion and Scalability}
+If the browser-based prototype proves successful, the next plan is to
+package it as an \textbf{offline-first Chrome extension}.  
+SQLite's embedded design keeps the entire password vault in a single file
+bundled with the extension, so no external server is required—precisely why
+SQLite was chosen.  This direction will let users install the password manager
+instantly from the Chrome Web Store and keep their credentials local while
+still benefiting from auto-fill and seamless updates.
 
-\subsection{Future Expansion and Scalability}
-With the successful demonstration of the web-based prototype’s advantages in accessibility and usability, the groundwork has been established for future expansions onto other platforms, such as desktop and mobile applications. Planned next steps include:
+Planned next steps include:
 \begin{itemize}
-\item \textbf{Technology Evaluation:} Comparative analysis of cross-platform frameworks (e.g., Electron, React Native) focusing on compatibility, ease of code migration, and performance considerations.
-\item \textbf{Scalability Planning:} Developing strategies for accommodating larger user bases, maintaining system performance, and ensuring consistent security standards across different platforms.
+  \item Adapting the current React/TypeScript codebase to Chrome Extension
+        APIs (manifest v3) for secure content-script injection and
+        background tasks.
+  \item Implementing permission-scoped access to web pages for auto-fill
+        while preserving privacy.
+  \item Testing storage limits and performance of the SQLite WASM build in
+        Chrome to ensure smooth operation on low-end devices.
+  \item Exploring optional cloud backup and multi-device sync as opt-in
+        features, keeping the default experience fully offline.
 \end{itemize}
+
 
 %% TODO: In dit hoofstuk geef je een korte toelichting over hoe je te werk bent
 %% gegaan. Verdeel je onderzoek in grote fasen, en licht in elke fase toe wat

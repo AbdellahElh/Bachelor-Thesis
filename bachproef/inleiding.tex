@@ -48,19 +48,25 @@ The primary objective of this thesis is to design and develop a proof-of-concept
   \item \textbf{User-Friendly Interface:} Adhering to Web Content Accessibility Guidelines (WCAG) to ensure ease of use for the target audience.
 \end{itemize}
 
-\section{\IfLanguageName{dutch}{Opzet van deze bachelorproef}{Structure of this Bachelor Thesis}}%
+\section{\IfLanguageName{dutch}{Opzet van deze bachelorproef}{Structure of this Bachelor Thesis}}
 \label{sec:opzet-bachelorproef}
 
-% Het is gebruikelijk aan het einde van de inleiding een overzicht te
-% geven van de opbouw van de rest van de tekst. Deze sectie bevat al een aanzet
-% die je kan aanvullen/aanpassen in functie van je eigen tekst.
+The remainder of this bachelor thesis is organised as follows:
 
-De rest van deze bachelorproef is als volgt opgebouwd:
+\begin{description}
+  \item[Chapter~\ref{ch:stand-van-zaken} \textemdash\ State of the Art] provides a targeted literature review.  
+        It surveys traditional and biometric authentication methods,  
+        analyses the specific accessibility challenges these methods pose,  
+        reviews face-recognition algorithms and libraries,  
+        compares leading JavaScript, Python and Java implementations, and  
+        summarises security, cryptographic and WCAG 2.1 accessibility requirements that shape the remainder of the work.
 
-In Hoofdstuk~\ref{ch:stand-van-zaken} wordt een overzicht gegeven van de stand van zaken binnen het onderzoeksdomein, op basis van een literatuurstudie.
+  \item[Chapter~\ref{ch:methodologie} \textemdash\ Methodology] explains the research design and technical approach.  
+        It justifies the selection of \texttt{face-api.js}, details the agile, TypeScript-based prototype development process, motivates the choice of SQLite for local credential storage, and describes the success metrics (accessibility gain, security strength and usability) that will later be evaluated.
 
-In Hoofdstuk~\ref{ch:methodologie} wordt de methodologie toegelicht en worden de gebruikte onderzoekstechnieken besproken om een antwoord te kunnen formuleren op de onderzoeksvragen.
+  \item[Chapter~\ref{ch:implementatie} \textemdash\ Prototype Implementation] documents the architecture of the web-based password manager.  
+        It covers the facial-authentication workflow, from backend to frontend; the cryptographic handling of credentials with \texttt{bcrypt}, and the WCAG-compliant user interface.
 
-% TODO: Vul hier aan voor je eigen hoofstukken, één of twee zinnen per hoofdstuk
-
-In Hoofdstuk~\ref{ch:conclusie}, tenslotte, wordt de conclusie gegeven en een antwoord geformuleerd op de onderzoeksvragen. Daarbij wordt ook een aanzet gegeven voor toekomstig onderzoek binnen dit domein.
+  \item[Chapter~\ref{ch:conclusie} \textemdash\ Conclusion] reports the empirical results and synthesises the findings. 
+        It presents functional tests and an accessibility study. The outcomes are discussed against the success metrics limitations are reflected upon, and avenues for future work are proposed.
+\end{description}
