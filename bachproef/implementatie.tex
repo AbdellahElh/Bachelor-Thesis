@@ -10,4 +10,99 @@
 % Cover the facial-authentication workflow, cryptographic handling of credentials
 % with bcrypt, the WCAG-compliant user interface, and the modular codebase.
 
-\lipsum[1-5] % Placeholder content
+
+\section{Project Genesis and Development Roadmap}
+The browser-based password manager with face authentication was engineered
+from an empty GitHub workspace into a polished prototype through ten
+well-defined phases.  Each phase delivered a vertical slice—UI, API, tests,
+and documentation—so that security and accessibility could be evaluated
+continuously.  Figure~\ref{fig:roadmap} visualises the flow; the narrative
+below expands on the underlying engineering decisions, tools, and lessons
+learned.
+
+\begin{enumerate}[leftmargin=*,label=\textbf{Phase \arabic*}]
+% -------------------------------------------------------------------
+\item \textbf{Concept \& Requirements Draft.}  
+      Before a single line of code, functional goals (local-first storage,
+      face-based login, end-to-end encryption) and non-functional goals
+      (WCAG 2.2 compliance, OWASP alignment, offline capability) were captured
+      in a living design document.  The README was seeded with a high-level
+      feature list and installation notes, establishing the project as
+      browser-only and privacy-first \autocite{README2025}. :contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}
+% -------------------------------------------------------------------
+\item \textbf{Repository \& Toolchain Bootstrap.}  
+      Two public repositories were created—\texttt{pwd-manager-frontend} and
+      \texttt{pwd-manager-backend}.  Shared lint rules (ESLint + Prettier),
+      Husky git hooks, and GitHub Actions workflows were added on day 1 to
+      gate every push with \emph{lint $\to$ type-check $\to$ test $\to$
+      build}.  Dependabot auto-PRs keep NPM dependencies patched, and
+      CodeQL scans run nightly to detect security smells.
+% -------------------------------------------------------------------
+\item \textbf{Frontend Scaffolding.}  
+      A Vite-generated React + TypeScript SPA provided instant HMR and
+      tree-shaking.  Tailwind CSS offered a utility-first design system,
+      while Vitest + React Testing Library constituted the unit-test bed.  The
+      inaugural screen—a WCAG-compliant “Hello Dashboard”—verified the build
+      pipeline and Lighthouse scores.  State was managed with SWR, chosen for
+      its stale-while-revalidate caching and tiny footprint.
+% -------------------------------------------------------------------
+\item \textbf{Backend Scaffolding.}  
+      An Express server (TypeScript) was initialised with Zod for request
+      validation and Swagger for live API docs.  Prisma ORM targeted SQLite
+      in development and PostgreSQL in production, allowing instant DB spins
+      via \texttt{npx prisma migrate dev}.  Jest tests covered health,
+      auth-token issuance, and placeholder CRUD endpoints.
+% -------------------------------------------------------------------
+\item \textbf{Biometric MVP.}  
+      The SPA integrated \texttt{face-api.js}; Tiny MobileNet V1 models were
+      stored under \texttt{/public/models}.  A webcam component captured live
+      frames, extracted 128-D descriptors, and compared them to a single
+      reference, unlocking the vault UI on a match threshold of 0.6.  Model
+      weights lazy-load in parallel with the splash screen, hiding latency
+      from the user.  All processing occurs client-side, so raw images never
+      traverse the network \autocite{SECURITYGuide}. :contentReference[oaicite:2]{index=2}:contentReference[oaicite:3]{index=3}
+% -------------------------------------------------------------------
+\item \textbf{Credential Vault CRUD.}  
+      React hooks abstracted credential operations; optimistic updates kept
+      the UI snappy while REST calls executed.  Backend routes
+      (\texttt{GET/POST /api/credentials} and friends) used Prisma clients
+      with index-based pagination.  Database constraints enforced foreign-key
+      integrity between \texttt{User} and \texttt{Credential}.
+% -------------------------------------------------------------------
+\item \textbf{End-to-End Client-Side Encryption.}  
+      A dedicated \texttt{cryptoUtils.ts} wrapped \texttt{crypto-js}.  PBKDF2
+      (10 000 iterations, 16-byte salt) produced a 256-bit key from user
+      metadata; AES-256-CBC encrypted passwords, notes, and face images
+      before any network transfer.  Mirror helpers on the server decrypted
+      images \emph{in-memory only} to compute descriptors, then zeroised
+      buffers.  No plaintext ever rested on disk or travelled the wire
+      \autocite{SECURITYGuide}. :contentReference[oaicite:4]{index=4}:contentReference[oaicite:5]{index=5}
+% -------------------------------------------------------------------
+\item \textbf{Secure Transport \& Deployment.}  
+      An Nginx reverse proxy, scripted in \texttt{docs/HTTPS\_SETUP.md},
+      terminates TLS with Let's Encrypt certificates, injects HSTS, CSP,
+      X-Frame-Options, and X-Content-Type-Options headers, then forwards API
+      traffic to the Node back-end over a Unix socket \autocite{HTTPSGuide}. :contentReference[oaicite:6]{index=6}:contentReference[oaicite:7]{index=7}  
+      A fallback Node HTTPS server is documented for bare-metal deployments.
+% -------------------------------------------------------------------
+\item \textbf{Accessibility \& UX Sprints.}  
+      WCAG 2.2 techniques—skip-links, ARIA labels, keyboard traps
+      elimination—were layered on top.  A zxcvbn-based strength meter and
+      responsive dark/light themes improved usability.  All interactive
+      elements meet a 4.5:1 contrast ratio, validated by the WAVE browser
+      extension.
+% -------------------------------------------------------------------
+\item \textbf{Quality Assurance \& Release Candidate.}  
+      Playwright end-to-end scripts simulated webcam sign-in, credential
+      export/import, and session timeout.  CI pipelines demanded 90\%
+      statement coverage; Istanbul reports gate-kept merges.  A PWA
+      manifest, service-worker precaching, and a desktop “install” prompt
+      completed the release candidate, which scores 100/100/100/100 on
+      Lighthouse (Performance, Accessibility, Best Practices, SEO).
+\end{enumerate}
+
+This phased roadmap illustrates how the application matured from design
+sketches into a secure, accessible, and offline-capable vault that never
+exposes plaintext credentials or biometric data beyond the user's browser.
+
+

@@ -113,6 +113,43 @@ cloud-centric password manager but cedes full data custody to Google.
 \section{Cryptographic Security in Password Managers}
 Secure storage of credentials is fundamental in password management. Password managers typically employ cryptographic algorithms to protect user data, such as bcrypt, PBKDF2, and Argon2. Bcrypt, widely adopted in JavaScript-based solutions, offers robust resistance to brute-force attacks by incorporating computationally intensive hashing processes \autocite{Pant2022}. This thesis utilizes bcrypt due to its proven reliability, widespread adoption, and compatibility with JavaScript-based web applications.
 
+\section{Cryptographic Security in Password Managers}
+Secure storage of credentials is fundamental in password management.  
+In this project, every cryptographic operation executes client-side with the
+\texttt{crypto-js} library, combining AES-256 for confidentiality and PBKDF2
+for key derivation.  AES supplies a NIST-approved block cipher, while
+PBKDF2’s 10\,000 iterations and per-installation salt greatly raise the cost
+of brute-force attacks.  Keeping both encryption and decryption in the browser
+ensures plaintext credentials or biometric images never leave the device,
+aligning with OWASP key-management guidance
+\autocite{CryptoJS2024, NISTFIPS197, RFC8018, OWASPKeyMgmt2025}. :contentReference[oaicite:0]{index=0}
+
+\subsubsection{Crypto-js}  
+The \texttt{crypto-js} library offers JavaScript implementations of AES,
+PBKDF2, and other standard algorithms through a concise API optimised for the
+browser.  Its widespread adoption and open-source governance mean the code
+base is continuously scrutinised and updated for vulnerabilities
+\autocite{CryptoJS2024}. :contentReference[oaicite:1]{index=1}
+
+\subsubsection{AES}  
+AES-256 encrypts both passwords and face images, providing a large key space
+and proven resistance to cryptanalysis.  Defined in FIPS 197, AES remains the
+de-facto standard for protecting electronic data across government and
+industry \autocite{NISTFIPS197}. :contentReference[oaicite:2]{index=2}
+
+\subsubsection{Encryption Key Handling}  
+Each encryption key is derived in the browser at login and kept only in
+memory; it is never persisted or sent to the backend.  This client-centric
+approach follows OWASP key-management recommendations, ensuring a server
+breach alone cannot expose decryption keys
+\autocite{OWASPKeyMgmt2025}. :contentReference[oaicite:3]{index=3}
+
+\subsubsection{PBKDF2}  
+PBKDF2, specified in RFC 8018, transforms the user’s secret into a strong
+256-bit key using 10\,000 iterations and a unique 16-byte salt.  Iterative
+key stretching slows dictionary attacks, while the salt thwarts rainbow
+tables \autocite{RFC8018}. :contentReference[oaicite:4]{index=4}
+
 \section{Usability and Accessibility Standards}
 Accessibility in digital solutions adheres to guidelines such as WCAG, which outline best practices for minimizing cognitive load, ensuring interface clarity, and reducing physical input requirements. Adopting these standards ensures the password manager prototype remains usable for individuals with various disabilities \autocite{Brewer2023}. Inclusive design principles further emphasize the need to involve users with disabilities in the development process to validate and refine usability \autocite{Lazar2015}.
 
