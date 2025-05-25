@@ -12,7 +12,78 @@
 %   explicit approval!), remove the option "dutch," or replace with "english".
 \usepackage{xcolor}
 \usepackage{listings}
+\usepackage{caption} % For proper captions
+\usepackage{float} % For H placement specifier
+\usepackage{mdframed} % For controlling frames
 \usepackage{lipsum} % For blind text, can be removed after adding actual content
+
+% Custom colors for VS Code dark theme
+\definecolor{vscodeBackground}{RGB}{30, 30, 30}
+\definecolor{vscodeComment}{RGB}{106, 153, 85}
+\definecolor{vscodeKeyword}{RGB}{86, 156, 214}
+\definecolor{vscodeString}{RGB}{206, 145, 120}
+\definecolor{vscodeType}{RGB}{78, 201, 176}
+\definecolor{vscodeForeground}{RGB}{220, 220, 220}
+
+% Configure listings for TypeScript code
+\lstdefinelanguage{TypeScript}{
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, finally, for, function, if, in, instanceof, new, return, switch, this, throw, try, typeof, var, void, while, with, const, let, async, await, class, export, extends, import, super, interface, from},
+  keywordstyle=\color{vscodeKeyword},
+  ndkeywords={true, false, null, undefined, string, number, boolean, any, void},
+  ndkeywordstyle=\color{vscodeType},
+  identifierstyle=\color{vscodeForeground},
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{vscodeComment},
+  stringstyle=\color{vscodeString},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+% Define a completely borderless style for code listings
+\definecolor{numberGray}{RGB}{100, 100, 100}
+\definecolor{lineNumberBg}{RGB}{40, 40, 40}
+
+% Configure main listing style
+\definecolor{frameColor}{RGB}{40, 40, 40}
+
+\lstset{
+  backgroundcolor=\color{vscodeBackground},
+  basicstyle=\small\ttfamily\color{vscodeForeground},
+  frame=none,
+  framerule=0pt,
+  framesep=0pt,
+  xleftmargin=15pt,
+  xrightmargin=5pt,
+  breaklines=true,
+  breakatwhitespace=false,
+  postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookrightarrow\space}},
+  tabsize=2,
+  numbers=left,
+  numberstyle=\tiny\color{numberGray},
+  numbersep=10pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  captionpos=b,
+  columns=flexible,
+  keepspaces=true,
+  aboveskip=1em,
+  belowskip=1em
+}
+
+% Just use the existing listings setup without trying to redefine environments
+\captionsetup[lstlisting]{labelsep=period, labelfont=bf, textfont=it}
+
+% Create a completely borderless frame for listings
+\surroundwithmdframed[hidealllines=true, backgroundcolor=vscodeBackground, innerleftmargin=15pt, innerrightmargin=5pt, skipabove=1em, skipbelow=1em]{lstlisting}
+
+% Add a bit of spacing around listings
+\lstset{
+  aboveskip=1em,
+  belowskip=1em
+}
 % No need to include enumitem package as it's already loaded in hogentreport.cls
 % Enable inline lists feature directly after the document class
 \makeatletter

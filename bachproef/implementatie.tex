@@ -45,16 +45,16 @@ Node.js 18, Express 4, TypeScript, Prisma, \texttt{face-api.js} running under \t
 Development progressed through the following incremental phases:
 
 \begin{enumerate}[label=\textbf{Phase~\arabic*:}, leftmargin=2.5em]
-  \item[0.] \emph{Requirements \& accessibility goals} - zero plaintext outside the browser and WCAG 2.2 AA compliance.%
-  \item 1 - Dual-repo setup (\texttt{pwd-manager-frontend} \& \texttt{pwd-manager-backend}) merged into a monorepo with Nx, CI pipeline (ESLint, tests, Docker).%
-  \item 2 - Core architecture: React + Vite SPA, Express API, Prisma models \emph{User} \& \emph{Credential}.%
-  \item 3 - Face-authentication MVP using Tiny MobileNet V1 and in-browser matching.%
-  \item 4 - End-to-end client-side cryptography (PBKDF2 $\rightarrow$ AES-256-CBC).%
-  \item 5 - Credential-vault CRUD with optimistic UI updates and password-strength meter.%
-  \item 6 - Transport security and DevOps: Nginx + Let's Encrypt, HSTS, CSP, multi-stage Docker images.%
-  \item 7 - Accessibility pass and UI refinements.%
-  \item 8 - Backup/restore via encrypted JSON and initial sync stubs for future cloud integration.%
-  \item 9 - Quality assurance: Vitest, Jest, Playwright end-to-end tests, CI coverage $>$90\,\%.%
+  \item \emph{Requirements \& accessibility goals} - zero plaintext outside the browser and WCAG 2.2 AA compliance.%
+  \item Dual-repo setup (\texttt{pwd-manager-frontend} \& \texttt{pwd-manager-backend}) merged into a monorepo with Nx, CI pipeline (ESLint, tests, Docker).%
+  \item Core architecture: React + Vite SPA, Express API, Prisma models \emph{User} \& \emph{Credential}.%
+  \item Face-authentication MVP using Tiny MobileNet V1 and in-browser matching.%
+  \item End-to-end client-side cryptography (PBKDF2 $\rightarrow$ AES-256-CBC).%
+  \item Credential-vault CRUD with optimistic UI updates and password-strength meter.%
+  \item Transport security and DevOps: Nginx + Let's Encrypt, HSTS, CSP, multi-stage Docker images.%
+  \item Accessibility pass and UI refinements.%
+  \item Backup/restore via encrypted JSON and initial sync stubs for future cloud integration.%
+  \item Quality assurance: Vitest, Jest, Playwright end-to-end tests, CI coverage $>$90\,\%.%
 \end{enumerate}
 
 
@@ -70,20 +70,21 @@ Keys are never transmitted in plaintext; instead they are derived client-side wi
 \subsubsection{Password encryption workflow}
 
 \paragraph{Key derivation (PBKDF2).}
-A 256-bit key is derived in the browser from a user-specific base key and a 16-byte salt, using 10000 iterations:
+A 256-bit key is derived in the browser from a user-specific base key and a 16-byte salt, using 10000 iterations.
 
-\begin{verbatim}
+\begin{lstlisting}[language=TypeScript, caption={Key derivation function using PBKDF2}, label={lst:strengthen-key}]
 export const strengthenKey = (baseKey: string): string => {
   return PBKDF2(baseKey, SALT, {
     keySize: KEY_SIZE / 32,   // 256 bits
     iterations: ITERATIONS,   // 10,000
   }).toString();
 };
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{AES-256 encryption and decryption.}
+The code below demonstrates the encryption and decryption functions used in the client. The encrypt function strengthens the provided key and uses AES to encrypt the value, while the decrypt function reverses this process with error handling.
 
-\begin{verbatim}
+\begin{lstlisting}[language=TypeScript, caption={AES-256 encryption and decryption functions}, label={lst:encrypt-decrypt}]
 export const encrypt = (value: string, secretKey: string): string => {
   if (!value) return "";
   const strengthenedKey = strengthenKey(secretKey);
@@ -104,11 +105,11 @@ export const decrypt = (
     return "";
   }
 };
-\end{verbatim}
+\end{lstlisting}
 
-Each user obtains a unique secret based on their ID, e-mail and an application secret:
+Each user obtains a unique secret based on their ID, e-mail and an application secret, as shown in the following function.
 
-\begin{verbatim}
+\begin{lstlisting}[language=TypeScript, caption={User-specific encryption key generation}, label={lst:user-key}]
 export const getUserEncryptionKey = (
   userId: number,
   userEmail: string
@@ -116,11 +117,11 @@ export const getUserEncryptionKey = (
   const appSecretKey = import.meta.env.VITE_SECRET_KEY || "app-default-key";
   return `pwd-manager-${userId}-${userEmail}-${appSecretKey}`;
 };
-\end{verbatim}
+\end{lstlisting}
 
-Before storage, credential fields are encrypted as follows:
+Before storage, credential fields are encrypted using the function below, which processes each sensitive field individually.
 
-\begin{verbatim}
+\begin{lstlisting}[language=TypeScript, caption={Encryption of credential fields before storage}, label={lst:encrypt-credential}]
 const encryptCredential = (
   credential: CredentialEntry,
   encryptionKey: string
@@ -134,14 +135,14 @@ const encryptCredential = (
       : undefined,
   };
 };
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Face-image encryption workflow}
 
 \paragraph{Client-side processing.}
-A captured webcam frame is converted to Base64 and then encrypted with the same AES/PBKDF2 scheme:
+A captured webcam frame is converted to Base64 and then encrypted with the same AES/PBKDF2 scheme, as demonstrated in the code below.
 
-\begin{verbatim}
+\begin{lstlisting}[language=TypeScript, caption={Client-side webcam image processing and encryption}, label={lst:image-processing}]
 export const blobToBase64 = (blob: Blob): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -165,11 +166,11 @@ export const encryptImage = async (
   const encryptedData = encrypt(base64Data, encryptionKey);
   return { encryptedData, contentType: imageBlob.type };
 };
-\end{verbatim}
+\end{lstlisting}
 
-Encrypted payloads are packaged into a `FormData` object for upload:
+Encrypted payloads are packaged into a `FormData` object for upload using the following utility function.
 
-\begin{verbatim}
+\begin{lstlisting}[language=TypeScript, caption={Creation of FormData for encrypted image upload}, label={lst:form-data}]
 export const createEncryptedImageFormData = async (
   imageBlob: Blob,
   encryptionKey: string,
@@ -188,12 +189,12 @@ export const createEncryptedImageFormData = async (
   );
   return formData;
 };
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Server-side decryption.}
-The backend reproduces the key, then performs AES-256-CBC decryption:
+The backend reproduces the key, then performs AES-256-CBC decryption as demonstrated in the server-side functions below.
 
-\begin{verbatim}
+\begin{lstlisting}[language=TypeScript, caption={Server-side decryption of encrypted data from the frontend}, label={lst:server-decryption}]
 export const decryptFromFrontend = (
   cipherText: string,
   password: string
@@ -218,7 +219,7 @@ export const decryptUserImage = (
   const encryptionKey = getUserEncryptionKey(userId, userEmail);
   return decryptFromFrontend(encryptedBase64, encryptionKey);
 };
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Security guarantees}
 
