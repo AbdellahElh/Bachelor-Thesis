@@ -40,8 +40,12 @@ Choosing an efficient, secure database to manage user credentials forms a crucia
   \item \textbf{PostgreSQL:} Evaluated for future scenarios that demand greater scalability, flexible data models and larger datasets.
 \end{itemize}
 
-Both database solutions undergo performance tests and security assessments during prototype development.
+Both MongoDB and Couchbase Lite were evaluated but not carried forward:
 
+\begin{itemize}
+  \item \textbf{MongoDB:} Although MongoDB offers flexible JSON-style storage and horizontal scaling, it requires a standalone \texttt{mongod} server process with a substantial memory footprint (1-2 GB RAM even under modest loads), and at-rest encryption is only available in the Enterprise edition, needing external disk- or field-level encryption and hardened defaults. These characteristics conflict with the prototype's goal of a lightweight, offline-first client vault.
+  \item \textbf{Couchbase Lite:} While Couchbase Lite embeds a document store with built-in AES-256 encryption and runs fine in a mobile sandbox, its on-disk metadata inflation and dependence on a Sync Gateway for cross-device sync introduce storage overhead and architectural complexity beyond the scope of the planned initial single-device prototype.
+\end{itemize}
 \section{Future Expansion and Scalability}
 If the browser-based prototype proves successful, the next plan is to
 package it as an \textbf{offline-first Chrome extension}.  

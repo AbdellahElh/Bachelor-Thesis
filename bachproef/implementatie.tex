@@ -1,4 +1,4 @@
-%%=============================================================================
+
 %% Implementatie
 %%=============================================================================
 
@@ -10,115 +10,222 @@
 % Cover the facial-authentication workflow, cryptographic handling of credentials
 % with bcrypt, the WCAG-compliant user interface, and the modular codebase.
 
-\section{Prototype Implementation Roadmap}
-\label{sec:impl-roadmap}
-This chapter narrates the journey from an idea—to build an
-\emph{accessible, privacy-first password manager guarded by a face
-instead of a master password}—to a fully-functioning, open-source
-prototype.  Development proceeded in ten incremental phases; each phase
-delivered a vertical slice (UI + API + tests + docs) so that security,
-performance, and accessibility could be evaluated continuously.
+\section{Prototype Implementation}
 
-\subsection{Phase 0 — Requirements \& Accessibility Goals}
-The design dossier set three non-negotiable targets: (i) \textbf{zero
-plaintext secrets outside the user's browser}, (ii) \textbf{WCAG 2.2
-Level AA compliance} for users with cognitive or motor impairments, and
-(iii) \textbf{offline capability}.  The README codifies these goals and
-outlines installation, HTTPS prerequisites, and backup advice
-:contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}.
-
-\subsection{Phase 1 — Dual-Repo \& Monorepo Foundation}
-Two public GitHub repositories—\texttt{pwd-manager-frontend} and
-\texttt{pwd-manager-backend}—were initialised, then bundled into a
-monorepo via Nx so that shared TypeScript types compile once and flow
-across packages.  ESLint + Prettier rules, Husky pre-commit hooks, and a
-GitHub Actions pipeline (lint → type-check → unit tests → Docker build)
-were in place before feature code landed.
-
-\subsection{Phase 2 — Core Architecture}
+\subsection{Architecture overview}
+The password manager is implemented as a modern client-server web application.  
 \begin{itemize}
-  \item \textbf{Frontend (SPA).}  
-        React + TypeScript driven by Vite for sub-second HMR; Tailwind
-        CSS for an atomic, themeable design system; SWR for stale-while-
-        revalidate caching.  All business logic resides in \emph{feature
-        hooks} that may later power a Chrome extension.
-  \item \textbf{Backend (API).}  
-        Express 4 with TypeScript, Zod request validation, and Swagger
-        auto-docs.  Prisma ORM targets SQLite in dev and PostgreSQL in
-        prod, offering seamless migration scripts.
-  \item \textbf{Database.}  
-        Two tables: \texttt{User} (e-mail + face descriptor) and
-        \texttt{Credential} (site, encrypted username, encrypted
-        password).  A cascade rule deletes credentials if the parent
-        user is removed :contentReference[oaicite:2]{index=2}:contentReference[oaicite:3]{index=3}.
+  \item \textbf{Frontend} - a React single-page application (SPA) written in TypeScript delivers the user interface.  
+  \item \textbf{Backend} - a Node.js\,/\,Express service, also in TypeScript, handles data persistence, face-recognition logic and JSON Web Token (JWT) issuance.  
+  \item \textbf{Database} - user and credential data are stored in an SQLite file accessed through the Prisma ORM; a PostgreSQL target is available for future scaling.  
 \end{itemize}
 
-\subsection{Phase 3 — Face-Authentication Minimum Viable Product}
-Tiny MobileNet V1 models from \texttt{face-api.js} are pre-loaded in the
-browser.  A webcam component captures a frame, downsizes it to
-$320\times240$, computes a 128-D descriptor, and compares it against the
-reference in local storage using Euclidean distance ($\le 0.6$ = match).
-If no webcam is present the app gracefully falls back to a master-key
-dialog, satisfying progressive-enhancement principles
-:contentReference[oaicite:4]{index=4}:contentReference[oaicite:5]{index=5}.
+\subsection{Technology stack}
+\paragraph{Frontend}
+React {+} TypeScript, React Context API for state, Tailwind CSS components, Axios for REST calls, \texttt{crypto-js} for client-side AES-256 encryption, and \texttt{face-api.js} (TensorFlow.js) for in-browser face detection.
 
-\subsection{Phase 4 — End-to-End Client-Side Cryptography}
-\begin{enumerate*}
-  \item PBKDF2 (10 000 iterations, 16-byte salt) derives a 256-bit key
-        from user ID \& e-mail.  
-  \item AES-256-CBC encrypts every password and face image before any
-        network transfer.  
-  \item The backend decrypts images \emph{in RAM only} to extract the
-        descriptor; plaintext is never written to disk.  
-\end{enumerate*}
-Implementation details live in \texttt{cryptoUtils.ts} (frontend) and an
-equivalent Node module (back-end) :contentReference[oaicite:6]{index=6}:contentReference[oaicite:7]{index=7}.
+\paragraph{Backend}
+Node.js 18, Express 4, TypeScript, Prisma, \texttt{face-api.js} running under \texttt{node-canvas} for server-side inference, JWT for session tokens, and the Node \texttt{crypto} module for cryptography.
 
-\subsection{Phase 5 — Credential Vault CRUD}
-React hooks wrap Axios calls to RESTful endpoints
-(\verb|/api/credentials|).  Optimistic updates keep the UI responsive
-while Prisma carries out DB mutations.  Pagination, search, and
-zxcvbn-based password-strength metres arrived in the same sprint.
+\subsection{Face-authentication workflow}
+\begin{enumerate}
+  \item \textbf{Registration} - the browser captures a webcam frame, encrypts it with AES-256 under a user-specific key, and posts it to the server. After decryption, \texttt{face-api.js} extracts a 128-D descriptor that is stored with the user record.
+  \item \textbf{Login} - a fresh frame is captured, encrypted and processed in the same way; its descriptor is compared to the stored vector with Euclidean distance~$\le0.6$.
+  \item \textbf{Optimisation} - images are down-scaled (320\,$\times$\,240) and processed with TinyFaceDetector / MobileNet V1 models that are pre-loaded once at server start.
+\end{enumerate}
 
-\subsection{Phase 6 — Transport Security \& DevOps}
-The \texttt{HTTPS\_SETUP.md} guide automates TLS termination with
-Nginx + Let's Encrypt, injects HSTS, CSP, XFO and MIME-sniffing headers,
-and proxies API traffic over a Unix socket
-:contentReference[oaicite:8]{index=8}:contentReference[oaicite:9]{index=9}.  Production Docker images are multi-stage builds
-(< 90 MB), scanned nightly by GitHub Dependabot and CodeQL.
+\subsection{Secure credential vault}
+\begin{itemize}
+  \item Keys are derived client-side with PBKDF2 (10\,000 iterations, 16-byte salt).  
+  \item All usernames and passwords are AES-256-CBC encrypted in the browser before transmission; only ciphertext is stored.  
+  \item During retrieval the encrypted blobs are returned unchanged and decrypted locally, so plaintext secrets never leave the user's device.  
+\end{itemize}
 
-\subsection{Phase 7 — Accessibility Pass}
-Colour contrast ratios were raised to $\ge 4.5{:}1$; every interactive
-element gained ARIA labels and keyboard focus rings.  Skip-links, logical
-tab order, and reduced-motion media queries earned a perfect Lighthouse
-Accessibility score.
+\subsection{Implementation roadmap}
+Development progressed through the following incremental phases:
 
-\subsection{Phase 8 — Backup, Restore \& Sync Stubs}
-Encrypted JSON backups can be exported and re-imported via a drag-and-
-drop dialog.  The roadmap sketches optional Firestore cloud sync and a
-WASM-SQLite vault for future Chrome-extension packaging.
+\begin{enumerate}[label=\textbf{Phase~\arabic*:}, leftmargin=2.5em]
+  \item[0.] \emph{Requirements \& accessibility goals} - zero plaintext outside the browser and WCAG 2.2 AA compliance.%
+  \item 1 - Dual-repo setup (\texttt{pwd-manager-frontend} \& \texttt{pwd-manager-backend}) merged into a monorepo with Nx, CI pipeline (ESLint, tests, Docker).%
+  \item 2 - Core architecture: React + Vite SPA, Express API, Prisma models \emph{User} \& \emph{Credential}.%
+  \item 3 - Face-authentication MVP using Tiny MobileNet V1 and in-browser matching.%
+  \item 4 - End-to-end client-side cryptography (PBKDF2 $\rightarrow$ AES-256-CBC).%
+  \item 5 - Credential-vault CRUD with optimistic UI updates and password-strength meter.%
+  \item 6 - Transport security and DevOps: Nginx + Let's Encrypt, HSTS, CSP, multi-stage Docker images.%
+  \item 7 - Accessibility pass and UI refinements.%
+  \item 8 - Backup/restore via encrypted JSON and initial sync stubs for future cloud integration.%
+  \item 9 - Quality assurance: Vitest, Jest, Playwright end-to-end tests, CI coverage $>$90\,\%.%
+\end{enumerate}
 
-\subsection{Phase 9 — Quality Assurance}
-Vitest covers React hooks and crypto helpers; Jest covers API routes.
-Playwright simulates webcam sign-in, credential CRUD, and idle timeout.
-CI enforces $>$90 \% statement coverage before merges.
 
-\subsection{Phase 10 — Challenges \& Solutions}
-\begin{description}
-  \item[Face-recognition accuracy.]  
-        Normalised images and tuned thresholds cut false negatives from
-        19 \% to 3 \%.  
-  \item[Cross-platform crypto.]  
-        Shared config objects guarantee identical PBKDF2 parameters in
-        browser and Node.  
-  \item[Model loading latency.]  
-        Models cache in IndexedDB; first-paint still meets the 0.9 s PWA
-        budget on a 4G network.
-\end{description}
+\subsection{Database schema}
+The \texttt{User} table stores the e-mail address and the 128-dimensional face descriptor; the \texttt{Credential} table stores website metadata together with encrypted username and password, and cascades on user deletion.
 
-\bigskip
-\noindent
-The phased roadmap shows how accessibility, biometric convenience, and
-robust cryptography were layered step-by-step into a browser application
-that never exposes plaintext credentials or biometric data beyond the
-user's device.
+
+\subsection{Encryption and Decryption}\label{subsec:encryption}
+
+All sensitive fields including passwords and webcam images are protected end-to-end with AES-256 encryption.
+Keys are never transmitted in plaintext; instead they are derived client-side with PBKDF2 and reproduced server-side only when needed for decryption.
+
+\subsubsection{Password encryption workflow}
+
+\paragraph{Key derivation (PBKDF2).}
+A 256-bit key is derived in the browser from a user-specific base key and a 16-byte salt, using 10000 iterations:
+
+\begin{verbatim}
+export const strengthenKey = (baseKey: string): string => {
+  return PBKDF2(baseKey, SALT, {
+    keySize: KEY_SIZE / 32,   // 256 bits
+    iterations: ITERATIONS,   // 10,000
+  }).toString();
+};
+\end{verbatim}
+
+\paragraph{AES-256 encryption and decryption.}
+
+\begin{verbatim}
+export const encrypt = (value: string, secretKey: string): string => {
+  if (!value) return "";
+  const strengthenedKey = strengthenKey(secretKey);
+  return AES.encrypt(value, strengthenedKey).toString();
+};
+
+export const decrypt = (
+  encryptedValue: string,
+  secretKey: string
+): string => {
+  if (!encryptedValue) return "";
+  try {
+    const strengthenedKey = strengthenKey(secretKey);
+    const bytes = AES.decrypt(encryptedValue, strengthenedKey);
+    return bytes.toString(UTF8);
+  } catch (error) {
+    console.error("Failed to decrypt value:", error);
+    return "";
+  }
+};
+\end{verbatim}
+
+Each user obtains a unique secret based on their ID, e-mail and an application secret:
+
+\begin{verbatim}
+export const getUserEncryptionKey = (
+  userId: number,
+  userEmail: string
+): string => {
+  const appSecretKey = import.meta.env.VITE_SECRET_KEY || "app-default-key";
+  return `pwd-manager-${userId}-${userEmail}-${appSecretKey}`;
+};
+\end{verbatim}
+
+Before storage, credential fields are encrypted as follows:
+
+\begin{verbatim}
+const encryptCredential = (
+  credential: CredentialEntry,
+  encryptionKey: string
+): EncryptedCredential => {
+  return {
+    ...credential,
+    username: encrypt(credential.username, encryptionKey),
+    password: encrypt(credential.password, encryptionKey),
+    notes: credential.notes
+      ? encrypt(credential.notes, encryptionKey)
+      : undefined,
+  };
+};
+\end{verbatim}
+
+\subsubsection{Face-image encryption workflow}
+
+\paragraph{Client-side processing.}
+A captured webcam frame is converted to Base64 and then encrypted with the same AES/PBKDF2 scheme:
+
+\begin{verbatim}
+export const blobToBase64 = (blob: Blob): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (typeof reader.result === "string") {
+        const base64 = reader.result.split(",")[1]; // strip data URL prefix
+        resolve(base64);
+      } else {
+        reject(new Error("Failed to convert blob to base64"));
+      }
+    };
+    reader.readAsDataURL(blob);
+  });
+};
+
+export const encryptImage = async (
+  imageBlob: Blob,
+  encryptionKey: string
+): Promise<{ encryptedData: string; contentType: string }> => {
+  const base64Data = await blobToBase64(imageBlob);
+  const encryptedData = encrypt(base64Data, encryptionKey);
+  return { encryptedData, contentType: imageBlob.type };
+};
+\end{verbatim}
+
+Encrypted payloads are packaged into a `FormData` object for upload:
+
+\begin{verbatim}
+export const createEncryptedImageFormData = async (
+  imageBlob: Blob,
+  encryptionKey: string,
+  fieldName: string = "image",
+  additionalData: Record<string, string> = {}
+): Promise<FormData> => {
+  const { encryptedData, contentType } =
+    await encryptImage(imageBlob, encryptionKey);
+
+  const formData = new FormData();
+  formData.append(`${fieldName}Encrypted`, encryptedData);
+  formData.append(`${fieldName}ContentType`, contentType);
+  formData.append(`${fieldName}IsEncrypted`, "true");
+  Object.entries(additionalData).forEach(([k, v]) =>
+    formData.append(k, v)
+  );
+  return formData;
+};
+\end{verbatim}
+
+\paragraph{Server-side decryption.}
+The backend reproduces the key, then performs AES-256-CBC decryption:
+
+\begin{verbatim}
+export const decryptFromFrontend = (
+  cipherText: string,
+  password: string
+): Buffer => {
+  const parts = cipherText.split(":");        // salt:iv:data
+  const salt = Buffer.from(parts[0], "hex");
+  const iv   = Buffer.from(parts[1], "hex");
+  const encryptedData = Buffer.from(parts[2], "base64");
+
+  const key = deriveKey(password, salt);      // PBKDF2
+  const decipher = crypto.createDecipheriv(
+    CRYPTO_CONFIG.algorithm, key, iv
+  );
+  return Buffer.concat([decipher.update(encryptedData), decipher.final()]);
+};
+
+export const decryptUserImage = (
+  encryptedBase64: string,
+  userId: number,
+  userEmail: string
+): Buffer => {
+  const encryptionKey = getUserEncryptionKey(userId, userEmail);
+  return decryptFromFrontend(encryptedBase64, encryptionKey);
+};
+\end{verbatim}
+
+\subsubsection{Security guarantees}
+
+\begin{itemize}
+  \item \textbf{End-to-end encryption}: passwords and images are encrypted in the browser; only ciphertext and face descriptors are stored.  
+  \item \textbf{Per-user keys}: each key binds the user's ID and e-mail to an application secret, preventing key reuse across accounts.  
+  \item \textbf{Key strengthening}: PBKDF2 with 10 000 iterations thwarts brute-force attacks on weak secrets.  
+  \item \textbf{Compatible crypto}: frontend (\texttt{crypto-js}) and backend (\texttt{node:crypto}) use identical AES-256-CBC parameters, ensuring seamless decryption.  
+\end{itemize}
+
