@@ -30,7 +30,7 @@ Node.js 18, Express 4, TypeScript, Prisma, \texttt{face-api.js} running under \t
 \subsection{Face-authentication workflow}
 \begin{enumerate}
   \item \textbf{Registration} - the browser captures a webcam frame, encrypts it with AES-256 under a user-specific key, and posts it to the server. After decryption, \texttt{face-api.js} extracts a 128-D descriptor that is stored with the user record.
-  \item \textbf{Login} - a fresh frame is captured, encrypted and processed in the same way; its descriptor is compared to the stored vector with Euclidean distance~$\le0.6$.
+  \item \textbf{Login} - a fresh frame is captured, encrypted and processed in the same way; its descriptor is compared to the stored vector with Euclidean distance~$\le0.6$. Our target threshold (FAR $\leq 0.1\%$, FRR $\leq 10\%$) is grounded in the industry figures summarised in Section~\ref{sec:biometric-benchmarks}.
   \item \textbf{Optimisation} - images are down-scaled (320\,$\times$\,240) and processed with TinyFaceDetector / MobileNet V1 models that are pre-loaded once at server start.
 \end{enumerate}
 
