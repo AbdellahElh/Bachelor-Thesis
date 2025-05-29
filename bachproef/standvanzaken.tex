@@ -262,9 +262,9 @@ A comprehensive approach to accessibility requires systematic mapping of feature
   \label{tab:wcag-matrix-cont}
 \end{table}
 
-\section{Research-Based Accuracy Benchmarks for Facial Recognition}
+\section{Performance Benchmarks in Facial Biometrics}
 
-In addition to usability, it is important to evaluate the security accuracy of the facial authentication. While a full-scale laboratory test of false acceptance and rejection rates is beyond the scope of our small-sample usability study, we can approximate expectations by citing published benchmarks from similar biometric systems. These provide a reference point for how our prototype should perform in terms of False Accept Rate (FAR) and False Reject Rate (FRR).
+It is important to evaluate the security accuracy of the facial authentication. While a full-scale laboratory test of false acceptance and rejection rates is beyond the scope of our study, we can approximate expectations by citing published benchmarks from similar biometric systems. These provide a reference point for how our prototype should perform in terms of False Accept Rate (FAR) and False Reject Rate (FRR).
 
 \textbf{Windows Hello (IR Facial Login):} Microsoft’s Windows Hello face authentication system, which uses infrared imaging, sets stringent hardware requirements with a FAR of less than 0.001\% (i.e., fewer than 1 in 100{,}000 impostor attempts succeed) \autocite{MicrosoftHelloDocs}. In practice, Microsoft reports a FRR under 5\% without liveness detection, and under 10\% when anti-spoofing measures are enabled \autocite{MicrosoftHelloDocs}. While our web-based prototype (using a standard camera and \texttt{face-api.js}) cannot match these hardware-accelerated standards, it aims to follow the same design philosophy: prioritizing a low FAR even at the expense of occasional false rejects.
 
