@@ -30,7 +30,7 @@ Biometric authentication, particularly facial recognition, is gaining popularity
 Unlike passwords, biometric data are unique physical attributes of an individual, providing an inherent security advantage by eliminating risks associated with knowledge-based authentication methods, 
 such as forgetting or sharing passwords \autocite{Pant2022}.
 
-Facial recognition stands out as particularly promising because it is intuitive, does not require manual dexterity, and can be seamlessly integrated into daily digital interactions \autocite{Bhatt2011}. However, biometric systems are not without limitations. Spoofing attacks, privacy concerns, and the requirement for consistent lighting and camera quality present technical and ethical considerations that must be carefully managed \autocite{Kuznetsov2024, Bahia2024}.
+Facial recognition stands out as particularly promising because it is intuitive, does not require manual input, and can be seamlessly integrated into daily digital interactions \autocite{Bhatt2011}. However, biometric systems are not without limitations. Spoofing attacks, privacy concerns, and the requirement for consistent lighting and camera quality present technical and ethical considerations that must be carefully managed \autocite{Kuznetsov2024, Bahia2024}.
 
 
 \subsection{Comparison of Facial Recognition Libraries}
@@ -55,6 +55,8 @@ While facial recognition enhances accessibility, it also introduces specific sec
 \item \textbf{Spoofing Attacks:} Presentation attacks using photos or video recordings of legitimate users to deceive recognition systems \autocite{Kuznetsov2024}.
 \end{itemize}
 
+\clearpage
+
 Modern mitigation strategies include:
 \begin{itemize}
 \item \textbf{Liveness Detection:} Techniques to ensure the presence of a real, live user rather than a static image or video \autocite{Kuznetsov2024}.
@@ -66,26 +68,26 @@ Modern mitigation strategies include:
 \item \textbf{Cancelable Biometrics:} Applying irreversible transformations to biometric templates before storage, allowing for template revocation if compromised. \textcite{Rathgeb2011} provide a comprehensive survey of these techniques, highlighting their importance in protecting biometric data while maintaining authentication accuracy.
 \end{itemize}
 
-\section{Adversary Threat Models in Facial Biometric Authentication}
-Modern facial biometric systems must account for various adversary capabilities and attack vectors. Table 1 summarizes three critical threats and effective mitigation strategies, with references to recent literature and technical reports.
+% \section{Adversary Threat Models in Facial Biometric Authentication}
+% Modern facial biometric systems must account for various adversary capabilities and attack vectors. Table 1 summarizes three critical threats and effective mitigation strategies, with references to recent literature and technical reports.
 
-\begin{table}[htbp]
-  \centering
-  \small
-  \begin{tabular}{|p{3.2cm}|p{6.2cm}|p{5.8cm}|}
-    \hline
-    \textbf{Threat} & \textbf{Description} & \textbf{Mitigation(s)} \\
-    \hline
-    \textbf{Offline Database Theft} & Adversary gains unauthorized access to stored biometric templates or face embeddings (e.g., via a database breach). Stolen biometric data can be misused for identity theft or cross-system fraud, since compromised templates allow attackers to impersonate users or perform cross-matching across different services. (Unlike passwords, biometric traits are permanent, so a leaked template poses a long-term risk to the victim.) & Protect stored templates using strong cryptography and transform-based protections. Encrypt biometric databases at rest so stolen files are unusable, and apply non-invertible, revocable transformations (i.e. **cancelable biometrics**) to the templates. Cancelable biometric schemes store only a transformed version of the face data that cannot be reversed and can be *“revoked”* or replaced if compromised. Additional safeguards include multi-factor authentication - ensuring a biometric alone cannot unlock accounts - and hardware security modules for template storage, which together limit the damage from a stolen biometric database. \\
-    \hline
-    \textbf{Compromised Browser Extension} & A malicious or compromised browser extension (or similar client-side malware) intercepts facial data during capture or transmission. The attacker could tap into the live camera feed or extracted face embeddings and steal or manipulate this data in real time. This essentially creates a man-in-the-middle, allowing replay or injection of captured biometric data to fraudulently authenticate as the victim. *In fact, recent banking malware has been observed recording victims' faces and using AI-generated videos (deepfakes) to bypass facial authentication defenses.* & Isolate and secure the biometric processing on the client side, minimizing the extension's access to sensitive data. For example, perform face recognition in a trusted local environment (using in-browser ML libraries or OS-level APIs) so that raw images/embeddings aren't sent over the network. All communication between the browser and any authentication server should be encrypted end-to-end, preventing eavesdropping or tampering in transit. It's also wise to require explicit user presence or a secondary factor (MFA) before finalizing login. This way, even if an extension is compromised, an attacker cannot stealthily authenticate with stolen biometrics alone. Robust code signing and permission controls on extensions further reduce the risk of compromise. \\
-    \hline
-    \textbf{Shoulder-Surfing} & An attacker observes or records the legitimate user's face during an authentication attempt (e.g., looking over the user's shoulder or using a camera from nearby). By capturing the user's facial input, the adversary can later present a **spoof** - such as a photo, video, or mask of the user's face - to impersonate them. Biometric systems eliminate the need to type passwords (mitigating classic shoulder-surfing of secrets), but without countermeasures they remain vulnerable to replay attacks using captured biometric data. In essence, a clear image or video of the user can be “replayed” to fool a naïve face recognition system. & Deploy anti-spoofing and liveness detection measures to ensure the system is interacting with a live user *in real time* rather than a recording or static image. Effective liveness detection techniques include prompting the user to perform random actions (e.g. blink, turn head) or using 3D/infrared cameras to detect depth and vitality cues, which defeats simple photo or video replays. Advanced deep-learning-based **face anti-spoofing** can automatically classify and reject fake vs. live imagery. Furthermore, requiring user attention or a secondary confirmation (such as a phone notification or a known gesture) can mitigate the risk of covert observation. By combining these defenses - liveness verification and optional multi-factor checks - facial authentication systems become much more resistant to shoulder-surfing and presentation attacks. \\
-    \hline
-  \end{tabular}
-  \caption{Adversary capabilities and example mitigations for facial biometric authentication systems.}
-  \label{tab:threat-model}
-\end{table}
+% \begin{table}[htbp]
+%   \centering
+%   \small
+%   \begin{tabular}{|p{3.2cm}|p{6.2cm}|p{5.8cm}|}
+%     \hline
+%     \textbf{Threat} & \textbf{Description} & \textbf{Mitigation(s)} \\
+%     \hline
+%     \textbf{Offline Database Theft} & Adversary gains unauthorized access to stored biometric templates or face embeddings (e.g., via a database breach). Stolen biometric data can be misused for identity theft or cross-system fraud, since compromised templates allow attackers to impersonate users or perform cross-matching across different services. (Unlike passwords, biometric traits are permanent, so a leaked template poses a long-term risk to the victim.) & Protect stored templates using strong cryptography and transform-based protections. Encrypt biometric databases at rest so stolen files are unusable, and apply non-invertible, revocable transformations (i.e. **cancelable biometrics**) to the templates. Cancelable biometric schemes store only a transformed version of the face data that cannot be reversed and can be *“revoked”* or replaced if compromised. Additional safeguards include multi-factor authentication - ensuring a biometric alone cannot unlock accounts - and hardware security modules for template storage, which together limit the damage from a stolen biometric database. \\
+%     \hline
+%     \textbf{Compromised Browser Extension} & A malicious or compromised browser extension (or similar client-side malware) intercepts facial data during capture or transmission. The attacker could tap into the live camera feed or extracted face embeddings and steal or manipulate this data in real time. This essentially creates a man-in-the-middle, allowing replay or injection of captured biometric data to fraudulently authenticate as the victim. *In fact, recent banking malware has been observed recording victims' faces and using AI-generated videos (deepfakes) to bypass facial authentication defenses.* & Isolate and secure the biometric processing on the client side, minimizing the extension's access to sensitive data. For example, perform face recognition in a trusted local environment (using in-browser ML libraries or OS-level APIs) so that raw images/embeddings aren't sent over the network. All communication between the browser and any authentication server should be encrypted end-to-end, preventing eavesdropping or tampering in transit. It's also wise to require explicit user presence or a secondary factor (MFA) before finalizing login. This way, even if an extension is compromised, an attacker cannot stealthily authenticate with stolen biometrics alone. Robust code signing and permission controls on extensions further reduce the risk of compromise. \\
+%     \hline
+%     \textbf{Shoulder-Surfing} & An attacker observes or records the legitimate user's face during an authentication attempt (e.g., looking over the user's shoulder or using a camera from nearby). By capturing the user's facial input, the adversary can later present a **spoof** - such as a photo, video, or mask of the user's face - to impersonate them. Biometric systems eliminate the need to type passwords (mitigating classic shoulder-surfing of secrets), but without countermeasures they remain vulnerable to replay attacks using captured biometric data. In essence, a clear image or video of the user can be “replayed” to fool a naïve face recognition system. & Deploy anti-spoofing and liveness detection measures to ensure the system is interacting with a live user *in real time* rather than a recording or static image. Effective liveness detection techniques include prompting the user to perform random actions (e.g. blink, turn head) or using 3D/infrared cameras to detect depth and vitality cues, which defeats simple photo or video replays. Advanced deep-learning-based **face anti-spoofing** can automatically classify and reject fake vs. live imagery. Furthermore, requiring user attention or a secondary confirmation (such as a phone notification or a known gesture) can mitigate the risk of covert observation. By combining these defenses - liveness verification and optional multi-factor checks - facial authentication systems become much more resistant to shoulder-surfing and presentation attacks. \\
+%     \hline
+%   \end{tabular}
+%   \caption{Adversary capabilities and example mitigations for facial biometric authentication systems.}
+%   \label{tab:threat-model}
+% \end{table}
 
 
 \section{Current Limitations in Password Managers}
@@ -97,7 +99,7 @@ Password managers simplify password management by securely storing and auto-fill
 A password manager must choose a local datastore that balances footprint,
 offline capability, security, and future synchronisation needs.  The five
 candidates below are summarised with literature references and official
-documentation links; each paragraph is kept within seven lines for brevity.
+documentation links.
 
 \subsection*{SQLite}
 \textcite{Gaffney2022} show that SQLite embeds the entire ACID-compliant
@@ -106,18 +108,18 @@ process.  Its dynamic typing allows flexible schemas \autocite{Corovcak2025}.
 Because it lacks native user authentication, security depends on OS file
 permissions or extensions such as SQLCipher \autocite{Corovcak2025}.
 Official documentation confirms the zero-config model and SQL feature set
-\autocite{sqlLiteDoc2025}.  These traits make SQLite ideal for an offline,
+\autocite{sqlLiteDoc2025}. These traits make SQLite ideal for an offline,
 single-device password vault, provided the file is encrypted at rest.
 
 \subsection*{PostgreSQL}
 PostgreSQL's client-server design provides robust concurrency and rich SQL
-features after 35-years of development \autocite{Gkamas2022}.  It supports
-role-based access control and TLS for data in transit, yet the community
-edition offers no built-in at-rest encryption—administrators must use
-\textit{pgcrypto} or file-system measures \autocite{Crunchy2024,
-PostgreSQL2025}.  A local instance typically consumes hundreds of-MB of RAM,
-which is heavy for a mobile vault.  Hence PostgreSQL is secure and scalable,
-but over-provisioned for a single-user client.
+features after 35-years of development \autocite{Gkamas2022}. It provides 
+built-in role-based access control and supports TLS to secure data in transit.
+However, the community edition lacks native encryption at rest, so administrators 
+must rely on the \textit{pgcrypto} extension or file-system encryption 
+\autocite{Crunchy2024, PostgreSQL2025}. A local instance typically consumes hundreds of-MB of RAM,
+which is heavy for a single-user password vault. Hence PostgreSQL is secure and scalable,
+but overkill for a single-user application.
 
 \subsection*{MongoDB}
 MongoDB stores JSON-like documents in flexible collections and scales
@@ -126,9 +128,8 @@ RAM even for modest use \autocite{Dahunsi2021}.  Community builds provide
 authentication and TLS, yet encryption at rest is Enterprise-only
 \autocite{PrismaMongoEnc, MongoDB2025}, so disk encryption or field-level
 crypto is required.  Misconfiguration has repeatedly exposed databases,
-underscoring the need for hardened defaults \autocite{SqlLite2025}.  The
-server footprint makes MongoDB ill-suited to a purely offline desktop
-password manager.
+underscoring the need for hardened defaults.  The
+server footprint makes MongoDB unsuitable for a secure, single-user password vault.
 
 \subsection*{Couchbase Lite}
 Couchbase Lite embeds a document store inside the app and syncs through
@@ -147,12 +148,13 @@ Security combines Firebase Authentication with declarative Firestore Rules,
 while Google encrypts data in transit and at rest \autocite{FirebaseSecurity2025}.
 This offloads database maintenance but requires Internet access for initial
 login and long-term storage.  Firestore therefore suits a multi-device,
-cloud-centric password manager but cedes full data custody to Google.
+cloud-centric password manager but {\fontseries{sb}\selectfont cedes full data custody to Google}.
 
+\clearpage
 
 \section{Cryptographic Security in Password Managers}
 Secure storage of credentials is fundamental in password management.  
-In this project, every cryptographic operation executes client-side with the
+In this project, cryptographic operations execute client-side with the
 \texttt{crypto-js} library \autocite{CryptoJS2024}, combining AES-256 for
 confidentiality and PBKDF2 for key derivation.  AES supplies a
 NIST-approved block cipher \autocite{NISTFIPS197}, while PBKDF2's 10\,000
@@ -171,8 +173,7 @@ base is continuously scrutinised and updated for vulnerabilities
 
 \subsubsection{AES}  
 AES-256 encrypts both passwords and face images, providing a large key space
-and proven resistance to cryptanalysis.  Defined in FIPS 197, AES remains the
-de-facto standard for protecting electronic data across government and
+and proven resistance to cryptanalysis.  Defined in FIPS 197, AES remains the standard for protecting electronic data across government and
 industry \autocite{NISTFIPS197}. 
 
 \subsubsection{Encryption Key Handling}  
@@ -190,77 +191,6 @@ tables \autocite{RFC8018}.
 
 \section{Usability and Accessibility Standards}
 Accessibility in digital solutions adheres to guidelines such as WCAG, which outline best practices for minimizing cognitive load, ensuring interface clarity, and reducing physical input requirements. Adopting these standards ensures the password manager prototype remains usable for individuals with various disabilities \autocite{Brewer2023}. Inclusive design principles further emphasize the need to involve users with disabilities in the development process to validate and refine usability \autocite{Lazar2015}.
-
-\subsection{WCAG 2.1 Compliance Framework}
-A comprehensive approach to accessibility requires systematic mapping of features against established standards. The table below provides a traceability matrix that maps the password manager's features to the Web Content Accessibility Guidelines (WCAG 2.1) success criteria. This matrix serves as both a design reference and a verification tool to ensure all accessibility requirements are addressed in the implementation phase. When we discuss the usability study design in Chapter~\ref{ch:methodologie}, we will reference this matrix to highlight which criteria were empirically verified through user testing.
-
-\begin{table}[htbp]
-  \centering
-  \small
-  \begin{tabular}{|p{2.5cm}|p{1.5cm}|p{4cm}|p{4cm}|p{1.2cm}|}
-    \hline
-    \textbf{WCAG 2.1} & \textbf{Con-} & \textbf{Features} & \textbf{Evidence / Implementation} & \textbf{Status} \\
-    \textbf{Success} & \textbf{formance} & & & \\
-    \textbf{Criterion} & \textbf{Level} & & & \\ \hline
-    
-    1.1.1 Non-text Content & A & Face-registration and authentication UI, credential icons, action buttons & alt text for static images; ARIA labels (e.g. aria-label="Capture selfie") on camera controls & Pass \\ \hline
-    
-    1.3.1 Info \& Relationships & A & Modal forms for Add / Edit Credential, list view of saved credentials & Implemented with semantic HTML elements (\texttt{<form>}, \texttt{<label>}, \texttt{<ul>/<li>}); programmatic labels bound to inputs & Pass \\ \hline
-    
-    1.3.2 Meaningful Sequence & A & React component hierarchy for registration \& login flows & DOM order matches visual order; logical tab order verified with keyboard & Pass \\ \hline
-    
-    1.3.4 Orientation & AA & Responsive layout (CSS Flex/Grid) & UI adapts to both portrait and landscape on mobile; no fixed-orientation lock & Pass \\ \hline
-    
-    1.4.3 Contrast (Minimum) & AA & Global Tailwind theme & Colour palette tested with WCAG contrast checker: all text/background combinations $\geq$ 4.5:1 & Pass \\ \hline
-    
-    1.4.5 Images of Text & AA & Credential list, buttons & No UI element relies on rasterised text; all labels are true text & Pass \\ \hline
-    
-    1.4.10 Reflow & AA & Responsive UI on small screens & Tested to 320 px width without horizontal scroll & Pass \\ \hline
-    
-    1.4.11 Non-text Contrast & AA & Icon buttons, focus rings & SVG icons meet 3:1 contrast; focus outline uses high-contrast colour & Pass \\ \hline
-    
-    2.1.1 Keyboard & A & All interactive controls & tabIndex flows through modals and lists; face-capture can be triggered with Enter key & Pass \\ \hline
-    
-    2.1.2 No Keyboard Trap & A & Modal dialogs & Esc, Tab and Shift+Tab correctly move focus or close modal & Pass \\ \hline
-  \end{tabular}
-  \caption[WCAG 2.1 Traceability Matrix]{WCAG 2.1 Traceability Matrix for the Face-Based Password Manager. This matrix maps features of the prototype to relevant Web Content Accessibility Guidelines success criteria, demonstrating how the design addresses accessibility requirements.}
-  \label{tab:wcag-matrix}
-\end{table}
-
-\begin{table}[htbp]
-  \centering
-  \small
-  \begin{tabular}{|p{2.5cm}|p{1.5cm}|p{4cm}|p{4cm}|p{1.2cm}|}
-    \hline
-    \textbf{WCAG 2.1} & \textbf{Con-} & \textbf{Features} & \textbf{Evidence / Implementation} & \textbf{Status} \\
-    \textbf{Success} & \textbf{formance} & & & \\
-    \textbf{Criterion} & \textbf{Level} & & & \\ \hline
-    
-    2.2.1 Timing Adjustable & A & Face-capture countdown & 5-second default, user can extend to 15 s via settings & Pass \\ \hline
-    
-    2.3.1 Three Flashes or Below & A & Toast animations & All animations < 3 flashes/sec; none are bright flashes & Pass \\ \hline
-    
-    2.4.3 Focus Order & A & Credential list, modals & Logical sequential focus verified with screen-reader & Pass \\ \hline
-    
-    2.4.4 Link Purpose & A & External links in footer/help & Link text describes destination (e.g. "WCAG Quick-Ref") & Pass \\ \hline
-    
-    2.4.7 Focus Visible & AA & Custom focus outline & Uses 2 px outline + 4 px offset to meet visibility & Pass \\ \hline
-    
-    3.2.1 On Focus & A & Input fields, buttons & No unexpected context changes on focus & Pass \\ \hline
-    
-    3.2.2 On Input & A & Credential forms & Only explicit Save triggers state change; live form validation announced politely & Pass \\ \hline
-    
-    3.3.1 Error Identification & A & Form validation & Error messages displayed inline and exposed via aria-describedby & Pass \\ \hline
-    
-    3.3.2 Labels or Instructions & A & All form inputs, face-capture & Clear labels ("Email Address") and helper text ("Look straight at the camera") & Pass \\ \hline
-    
-    4.1.1 Parsing & A & React front-end templates & JSX compiles to valid HTML; no duplicate IDs & Pass \\ \hline
-    
-    4.1.2 Name, Role, Value & A & Custom components (Modal, Button, Toast) & Roles and states exposed with ARIA (role="dialog", aria-modal="true", aria-live="polite") & Pass \\ \hline
-  \end{tabular}
-  \caption[WCAG 2.1 Traceability Matrix (continued)]{WCAG 2.1 Traceability Matrix for the Face-Based Password Manager (continued).}
-  \label{tab:wcag-matrix-cont}
-\end{table}
 
 \section{Performance Benchmarks in Facial Biometrics}
 
