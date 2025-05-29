@@ -41,6 +41,9 @@ Node.js 18, Express 4, TypeScript, Prisma, \texttt{face-api.js} running under \t
   \item During retrieval the encrypted blobs are returned unchanged and decrypted locally, so plaintext secrets never leave the user's device.  
 \end{itemize}
 
+\subsection{Data protection and GDPR compliance}
+From a privacy perspective, facial data is classified as a special category of personal data under Article 9 of the EU General Data Protection Regulation (GDPR) \autocite{GDPR2016}, which means its processing is generally prohibited unless specific conditions (such as the data subject's explicit consent) are met. In recognition of these strict requirements, the prototype is designed with data minimization and user consent in mind. All facial images captured for authentication are immediately encrypted on the client side and never stored in plaintext or transmitted off the user's device, ensuring that no raw biometric data is persistently retained.
+
 \subsection{Implementation roadmap}
 Development progressed through the following incremental phases:
 
