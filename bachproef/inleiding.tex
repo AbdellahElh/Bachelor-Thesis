@@ -8,14 +8,19 @@
 In today's digital age, authentication is a crucial element of cybersecurity. Traditional password-based systems require users to create, remember, and accurately enter complex passwords. For individuals with cognitive or motor disabilities, this process presents significant challenges that can lead to frustration, frequent lockouts, and increased security risks. This thesis investigates the integration of face recognition technology into a password manager to develop an accessible and user-friendly authentication method.
 
 \subsection{Context and Background}
-The increasing reliance on online services has amplified the need for secure and accessible authentication solutions. Conventional methods, such as passwords, often fail to accommodate the unique needs of users with disabilities. Cognitive impairments may hinder memory recall, while motor disabilities can complicate the physical act of typing. These challenges underscore the necessity for an alternative approach—one that minimizes cognitive and physical burdens without compromising security. In this context, the proposed research explores the use of face recognition technology as a viable solution to enhance digital authentication.
+The increasing reliance on online services has amplified the need for secure and accessible authentication solutions. Conventional methods, such as passwords, often fail to accommodate the unique needs of users with disabilities. Cognitive impairments may hinder memory recall, while motor disabilities can complicate the physical act of typing. These challenges underscore the necessity for an alternative approach, one that minimizes cognitive and physical burdens without compromising security. In this context, the proposed research explores the use of face recognition technology as a viable solution to enhance digital authentication.
 
 \subsection{Justification of the Topic}
 This research focuses exclusively on evaluating face recognition as an alternative to traditional master passwords in a web-based password manager. Key points include:
 \begin{itemize}
-  \item \textbf{Target Group:} Individuals with cognitive and motor disabilities.
-  \item \textbf{Tool Selection:} Emphasis on tools like \texttt{face-api.js}, which operate entirely in the browser to ensure privacy by eliminating server-side processing.
-  \item \textbf{Alignment:} Integration with modern web technologies and adherence to accessibility standards.
+  \item \textbf{Target Group:} All users of password managers, with a special focus on individuals with cognitive and motor disabilities.
+  \item \textbf{Tool Selection:} The implementation leverages several key technologies chosen for their specific advantages:
+  \begin{itemize}
+    \item \texttt{face-api.js}: A lightweight, browser-based face recognition library that processes facial data locally, ensuring user privacy by eliminating the need for server-side processing of biometric data.
+    \item \texttt{TypeScript}: Selected for its strong typing system that enhances code reliability and maintainability, while being fully compatible with modern web standards.
+    \item \texttt{SQLite}: Chosen for local credential storage to provide a self-contained solution that doesn't rely on external database services.
+    \item \texttt{bcrypt}: Utilized for secure password hashing, providing robust protection against common attacks such as rainbow table and brute force attempts.
+  \end{itemize}
 \end{itemize}
 
 \section{\IfLanguageName{dutch}{Probleemstelling}{Problem Statement}}%
@@ -34,8 +39,9 @@ How can face recognition technology be effectively integrated into a password ma
 To explore this question further, the following sub-questions will be addressed:
 \begin{enumerate}
   \item What specific challenges do individuals with cognitive and motor disabilities face with traditional password systems?
-  \item How does face recognition technology compare to conventional methods in terms of usability and security?
-  \item What are the technical requirements and potential obstacles for incorporating face recognition into existing password management systems?
+  \item How can facial recognition be technically implemented to maintain end-to-end security while eliminating master passwords?
+  \item What trade-offs exist between accessibility, security, and usability when implementing browser-based facial recognition?
+  \item How effectively does the implemented client-side face recognition and cryptographic system ensure privacy and security, especially in preventing unauthorized access to biometric data and user credentials?
 \end{enumerate}
 
 \section{\IfLanguageName{dutch}{Onderzoeksdoelstelling}{Research Objective}}%
