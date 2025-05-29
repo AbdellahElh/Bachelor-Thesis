@@ -11,8 +11,8 @@ discussion:
 
     ▸ Accuracy: False-accept/false-reject rates from 500+ match attempts (can be synthetic if recruitment is hard).
 
-Statistical treatment
-Report confidence intervals; a bar chart without error bars will not satisfy examiners.
+    Statistical treatment
+    Report confidence intervals; a bar chart without error bars will not satisfy examiners.
 
 Comparative baseline
 Measure the same tasks with a mainstream password manager (Bitwarden) using a “type-your-master-password” flow; this quantifies the accessibility gain.
@@ -20,3 +20,5 @@ Measure the same tasks with a mainstream password manager (Bitwarden) using a �
 Add a short GDPR compliance paragraph: biometric data are “special category” personal data and require explicit consent; clarify storage duration and deletion policy.
 
 State that the prototype is for academic evaluation only and is not production-ready security software.
+
+fix roadmap
