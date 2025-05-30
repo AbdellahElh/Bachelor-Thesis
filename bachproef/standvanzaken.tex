@@ -1,3 +1,4 @@
+% filepath: d:\abdey\Documents\3. Toegepaste info\BachProef\latex-hogent-bachproef-main\latex-hogent-bachproef-main\bachproef\standvanzaken.tex
 \chapter{\IfLanguageName{dutch}{Stand van zaken}{State of the art}}%
 \label{ch:stand-van-zaken}
 
@@ -7,8 +8,6 @@
 
 % Pas na deze inleidende paragraaf komt de eerste sectiehoofding.
 
-
-% TODO: GDPR regulations about storing face data/imgs
 
 \section{Authentication in Digital Security}
 Authentication is the process of verifying the identity of users attempting to access digital systems or online services. 
@@ -21,7 +20,11 @@ further complicated by difficulties in recalling or accurately inputting passwor
 \section{Accessibility Challenges in Authentication}
 Individuals with cognitive disabilities, such as memory disorders or conditions like dyslexia, often struggle with remembering complex passwords, resulting in frequent authentication failures and frustration \autocite{Farid2019, Ophoff2021}. Those with motor disabilities, including conditions like Parkinson's disease or cerebral palsy, face physical challenges in typing passwords accurately \autocite{Renaud2020}. The Web Content Accessibility Guidelines (WCAG) highlight the importance of designing authentication systems that minimize these cognitive and physical burdens \autocite{Brewer2023}.
 
-\vspace{4\baselineskip}
+\clearpage
+
+\section{Current Limitations in Password Managers}
+Password managers simplify password management by securely storing and auto-filling credentials but commonly rely on a master password, perpetuating cognitive and motor accessibility issues. This approach is problematic for users who struggle with memory recall or precise typing \autocite{IALabs2024}. While MFA offers increased security, it often introduces additional complexity that further burdens users with disabilities. Current systems have limited inclusivity and accessibility, reinforcing the need for more intuitive solutions.
+
 \section{Facial Recognition Technology}
 Facial recognition works by identifying and verifying individuals from digital images or videos using various algorithmic approaches, including traditional image processing methods and modern deep learning techniques. Notable algorithms include Haar cascades, Eigenfaces, Local Binary Patterns Histograms (LBPH), and Convolutional Neural Networks (CNNs) \autocite{ElSayed2015}. The evolution of deep learning, particularly CNN-based approaches, has significantly enhanced accuracy and reliability, making facial recognition robust even under challenging conditions like variations in lighting, angle, or facial expressions \autocite{ZhangDlib2020}.
 
@@ -32,6 +35,7 @@ such as forgetting or sharing passwords \autocite{Pant2022}.
 
 Facial recognition stands out as particularly promising because it is intuitive, does not require manual input, and can be seamlessly integrated into daily digital interactions \autocite{Bhatt2011}. However, biometric systems are not without limitations. Spoofing attacks, privacy concerns, and the requirement for consistent lighting and camera quality present technical and ethical considerations that must be carefully managed \autocite{Kuznetsov2024, Bahia2024}.
 
+\clearpage
 
 \subsection{Comparison of Facial Recognition Libraries}
 
@@ -55,46 +59,20 @@ While facial recognition enhances accessibility, it also introduces specific sec
 \item \textbf{Spoofing Attacks:} Presentation attacks using photos or video recordings of legitimate users to deceive recognition systems \autocite{Kuznetsov2024}.
 \end{itemize}
 
-\clearpage
-
 Modern mitigation strategies include:
 \begin{itemize}
 \item \textbf{Liveness Detection:} Techniques to ensure the presence of a real, live user rather than a static image or video \autocite{Kuznetsov2024}.
 
-\item \textbf{Local Data Processing:} Client-side processing prevents the transmission of sensitive biometric data, enhancing privacy.
+\item \textbf{Client-side Encryption:} Captured images are encrypted in the browser before transmission, so no unencrypted biometric data leaves the device even though full descriptor extraction is performed server-side.
 
 \item \textbf{Multi-factor Authentication (MFA):} Combining biometric data with other authentication methods to provide layers of security and protect against vulnerabilities inherent in single-method authentication systems \autocite{Furnell2022}.
 
 \item \textbf{Cancelable Biometrics:} Applying irreversible transformations to biometric templates before storage, allowing for template revocation if compromised. \textcite{Rathgeb2011} provide a comprehensive survey of these techniques, highlighting their importance in protecting biometric data while maintaining authentication accuracy.
 \end{itemize}
 
-% \section{Adversary Threat Models in Facial Biometric Authentication}
-% Modern facial biometric systems must account for various adversary capabilities and attack vectors. Table 1 summarizes three critical threats and effective mitigation strategies, with references to recent literature and technical reports.
-
-% \begin{table}[htbp]
-%   \centering
-%   \small
-%   \begin{tabular}{|p{3.2cm}|p{6.2cm}|p{5.8cm}|}
-%     \hline
-%     \textbf{Threat} & \textbf{Description} & \textbf{Mitigation(s)} \\
-%     \hline
-%     \textbf{Offline Database Theft} & Adversary gains unauthorized access to stored biometric templates or face embeddings (e.g., via a database breach). Stolen biometric data can be misused for identity theft or cross-system fraud, since compromised templates allow attackers to impersonate users or perform cross-matching across different services. (Unlike passwords, biometric traits are permanent, so a leaked template poses a long-term risk to the victim.) & Protect stored templates using strong cryptography and transform-based protections. Encrypt biometric databases at rest so stolen files are unusable, and apply non-invertible, revocable transformations (i.e. **cancelable biometrics**) to the templates. Cancelable biometric schemes store only a transformed version of the face data that cannot be reversed and can be *“revoked”* or replaced if compromised. Additional safeguards include multi-factor authentication - ensuring a biometric alone cannot unlock accounts - and hardware security modules for template storage, which together limit the damage from a stolen biometric database. \\
-%     \hline
-%     \textbf{Compromised Browser Extension} & A malicious or compromised browser extension (or similar client-side malware) intercepts facial data during capture or transmission. The attacker could tap into the live camera feed or extracted face embeddings and steal or manipulate this data in real time. This essentially creates a man-in-the-middle, allowing replay or injection of captured biometric data to fraudulently authenticate as the victim. *In fact, recent banking malware has been observed recording victims' faces and using AI-generated videos (deepfakes) to bypass facial authentication defenses.* & Isolate and secure the biometric processing on the client side, minimizing the extension's access to sensitive data. For example, perform face recognition in a trusted local environment (using in-browser ML libraries or OS-level APIs) so that raw images/embeddings aren't sent over the network. All communication between the browser and any authentication server should be encrypted end-to-end, preventing eavesdropping or tampering in transit. It's also wise to require explicit user presence or a secondary factor (MFA) before finalizing login. This way, even if an extension is compromised, an attacker cannot stealthily authenticate with stolen biometrics alone. Robust code signing and permission controls on extensions further reduce the risk of compromise. \\
-%     \hline
-%     \textbf{Shoulder-Surfing} & An attacker observes or records the legitimate user's face during an authentication attempt (e.g., looking over the user's shoulder or using a camera from nearby). By capturing the user's facial input, the adversary can later present a **spoof** - such as a photo, video, or mask of the user's face - to impersonate them. Biometric systems eliminate the need to type passwords (mitigating classic shoulder-surfing of secrets), but without countermeasures they remain vulnerable to replay attacks using captured biometric data. In essence, a clear image or video of the user can be “replayed” to fool a naïve face recognition system. & Deploy anti-spoofing and liveness detection measures to ensure the system is interacting with a live user *in real time* rather than a recording or static image. Effective liveness detection techniques include prompting the user to perform random actions (e.g. blink, turn head) or using 3D/infrared cameras to detect depth and vitality cues, which defeats simple photo or video replays. Advanced deep-learning-based **face anti-spoofing** can automatically classify and reject fake vs. live imagery. Furthermore, requiring user attention or a secondary confirmation (such as a phone notification or a known gesture) can mitigate the risk of covert observation. By combining these defenses - liveness verification and optional multi-factor checks - facial authentication systems become much more resistant to shoulder-surfing and presentation attacks. \\
-%     \hline
-%   \end{tabular}
-%   \caption{Adversary capabilities and example mitigations for facial biometric authentication systems.}
-%   \label{tab:threat-model}
-% \end{table}
-
-
-\section{Current Limitations in Password Managers}
-Password managers simplify password management by securely storing and auto-filling credentials but commonly rely on a master password, perpetuating cognitive and motor accessibility issues. This approach is problematic for users who struggle with memory recall or precise typing \autocite{IALabs2024}. While MFA offers increased security, it often introduces additional complexity that further burdens users with disabilities. Current systems have limited inclusivity and accessibility, reinforcing the need for more intuitive solutions.
 
 \section{Database Options for Client\textendash Side Password Storage}
-\label{sec:db-options}
+\label{sec:database-selection}
 
 A password manager must choose a local datastore that balances footprint,
 offline capability, security, and future synchronisation needs.  The five
@@ -153,7 +131,8 @@ cloud-centric password manager but {\fontseries{sb}\selectfont cedes full data c
 \clearpage
 
 \section{Cryptographic Security in Password Managers}
-Secure storage of credentials is fundamental in password management.  
+\label{sec:crypto}
+Secure storage of credentials is fundamental in password management.
 In this project, cryptographic operations execute client-side with the
 \texttt{crypto-js} library \autocite{CryptoJS2024}, combining AES-256 for
 confidentiality and PBKDF2 for key derivation.  AES supplies a
@@ -189,16 +168,14 @@ PBKDF2, specified in RFC 8018, transforms the user's secret into a strong
 key stretching slows dictionary attacks, while the salt thwarts rainbow
 tables \autocite{RFC8018}.
 
-\section{Usability and Accessibility Standards}
-Accessibility in digital solutions adheres to guidelines such as WCAG, which outline best practices for minimizing cognitive load, ensuring interface clarity, and reducing physical input requirements. Adopting these standards ensures the password manager prototype remains usable for individuals with various disabilities \autocite{Brewer2023}. Inclusive design principles further emphasize the need to involve users with disabilities in the development process to validate and refine usability \autocite{Lazar2015}.
-
 \section{Performance Benchmarks in Facial Biometrics}
+\label{sec:biometric-benchmarks}
 
 It is important to evaluate the security accuracy of the facial authentication. While a full-scale laboratory test of false acceptance and rejection rates is beyond the scope of our study, we can approximate expectations by citing published benchmarks from similar biometric systems. These provide a reference point for how our prototype should perform in terms of False Accept Rate (FAR) and False Reject Rate (FRR).
 
-\textbf{Windows Hello (IR Facial Login):} Microsoft’s Windows Hello face authentication system, which uses infrared imaging, sets stringent hardware requirements with a FAR of less than 0.001\% (i.e., fewer than 1 in 100{,}000 impostor attempts succeed) \autocite{MicrosoftHelloDocs}. In practice, Microsoft reports a FRR under 5\% without liveness detection, and under 10\% when anti-spoofing measures are enabled \autocite{MicrosoftHelloDocs}. While our web-based prototype (using a standard camera and \texttt{face-api.js}) cannot match these hardware-accelerated standards, it aims to follow the same design philosophy: prioritizing a low FAR even at the expense of occasional false rejects.
+\textbf{Windows Hello (IR Facial Login):} Microsoft's Windows Hello face authentication system, which uses infrared imaging, sets stringent hardware requirements with a FAR of less than 0.001\% (i.e., fewer than 1 in 100{,}000 impostor attempts succeed) \autocite{MicrosoftHelloDocs}. In practice, Microsoft reports a FRR under 5\% without liveness detection, and under 10\% when anti-spoofing measures are enabled \autocite{MicrosoftHelloDocs}. While our web-based prototype (using a standard camera and \texttt{face-api.js}) cannot match these hardware-accelerated standards, it aims to follow the same design philosophy: prioritizing a low FAR even at the expense of occasional false rejects.
 
-\textbf{Apple Face ID (3D Face Recognition):} Apple’s Face ID system also uses 3D infrared facial imaging and targets an extremely low FAR, citing less than 1 in 1{,}000{,}000 chances of unauthorized access \autocite{BentoFaceID}. Although Apple has not disclosed detailed FRR statistics, empirical data suggests that its performance remains highly accurate for legitimate users in normal conditions, despite occasional false rejects caused by sunglasses or facial obstructions. As such, high-end consumer systems aim for FAR values between $10^{-5}$ and $10^{-6}$, while keeping FRR below 10\%.
+\textbf{Apple Face ID (3D Face Recognition):} Apple's Face ID system also uses 3D infrared facial imaging and targets an extremely low FAR, citing less than 1 in 1{,}000{,}000 chances of unauthorized access \autocite{BentoFaceID}. Although Apple has not disclosed detailed FRR statistics, empirical data suggests that its performance remains highly accurate for legitimate users in normal conditions, despite occasional false rejects caused by sunglasses or facial obstructions. As such, high-end consumer systems aim for FAR values between $10^{-5}$ and $10^{-6}$, while keeping FRR below 10\%.
 
 \textbf{Academic Benchmarks (FRVT and Others):} Independent evaluations, such as the U.S. National Institute of Standards and Technology (NIST) Face Recognition Vendor Test (FRVT), provide authoritative insight. A top-performing algorithm in FRVT 1:1 verification achieved a false non-match rate of 0.36\% at a FAR of 1 in 1{,}000{,}000 \autocite{ParavisionFRVT}. These results represent optimal conditions; performance degrades in less-controlled environments such as those encountered by webcam-based authentication. Nonetheless, they indicate the capabilities of modern face recognition technologies.
 
@@ -206,38 +183,5 @@ It is important to evaluate the security accuracy of the facial authentication. 
 
 Using these references, we propose that our prototype should aim for a FAR in the range of $\leq$0.1\% to prevent unauthorized access, while tolerating a FRR of 5--10\% as a reasonable usability trade-off. We conservatively set the matching threshold in our system to favor security, accepting that users may occasionally need to retry under suboptimal conditions.
 
-
-
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=0.8\textwidth]{grail.jpg}
-%   \caption[Voorbeeld figuur.]{\label{fig:grail}Voorbeeld van invoegen van een figuur. Zorg altijd voor een uitgebreid bijschrift dat de figuur volledig beschrijft zonder in de tekst te moeten gaan zoeken. Vergeet ook je bronvermelding niet!}
-% \end{figure}
-
-% \begin{listing}
-%   \begin{minted}{python}
-%     import pandas as pd
-%     import seaborn as sns
-
-%     penguins = sns.load_dataset('penguins')
-%     sns.relplot(data=penguins, x="flipper_length_mm", y="bill_length_mm", hue="species")
-%   \end{minted}
-%   \caption[Voorbeeld codefragment]{Voorbeeld van het invoegen van een codefragment.}
-% \end{listing}
-
-% \lipsum[7-20]
-
-% \begin{table}
-%   \centering
-%   \begin{tabular}{lcr}
-%     \toprule
-%     \textbf{Kolom 1} & \textbf{Kolom 2} & \textbf{Kolom 3} \\
-%     $\alpha$         & $\beta$          & $\gamma$         \\
-%     \midrule
-%     A                & 10.230           & a                \\
-%     B                & 45.678           & b                \\
-%     C                & 99.987           & c                \\
-%     \bottomrule
-%   \end{tabular}
-%   \caption[Voorbeeld tabel]{\label{tab:example}Voorbeeld van een tabel.}
-% \end{table}
+\section{Usability and Accessibility Standards}
+Accessibility in digital solutions adheres to guidelines such as WCAG, which outline best practices for minimizing cognitive load, ensuring interface clarity, and reducing physical input requirements. Adopting these standards ensures the password manager prototype remains usable for individuals with various disabilities \autocite{Brewer2023}. Inclusive design principles further emphasize the need to involve users with disabilities in the development process to validate and refine usability \autocite{Lazar2015}.

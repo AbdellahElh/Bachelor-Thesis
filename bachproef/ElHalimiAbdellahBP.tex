@@ -78,7 +78,7 @@
 }
 
 % Just use the existing listings setup without trying to redefine environments
-\captionsetup[lstlisting]{labelsep=period, labelfont=bf, textfont=it}
+\captionsetup[lstlisting]{labelsep=period, labelfont={bf,color=vscodeForeground}, textfont={it,color=vscodeForeground}}
 
 % Create a completely borderless frame for listings
 \surroundwithmdframed[hidealllines=true, backgroundcolor=vscodeBackground, innerleftmargin=15pt, innerrightmargin=5pt, skipabove=1em, skipbelow=1em]{lstlisting}
@@ -119,16 +119,19 @@
     tabsize=4
 }
 
-%% Ensure the list of listings is in the table of contents
+%% Ensure listings appear in the list of listings
 \renewcommand\listoflistingscaption{%
     \IfLanguageName{dutch}{Lijst van codefragmenten}{List of listings}
 }
 \renewcommand\listingscaption{%
     \IfLanguageName{dutch}{Codefragment}{Listing}
 }
+% Make sure the listings package uses our caption/label settings
+\let\lst@caption\relax
+% Just use the standard listings package command
 \renewcommand*\listoflistings{%
     \cleardoublepage\phantomsection\addcontentsline{toc}{chapter}{\listoflistingscaption}%
-    \listof{listing}{\listoflistingscaption}%
+    \lstlistoflistings%
 }
 
 % Other packages not already included can be imported here
@@ -196,7 +199,7 @@
 %
 % If you do, only the short description will be used in the list of figures
 
-\listoffigures
+% \listoffigures  % Commented out - no figures in thesis
 
 % If you included tables and/or source code listings, uncomment the appropriate
 % lines.

@@ -7,88 +7,10 @@
 
 The development process for this project is structured into distinct stages, each pursuing specific objectives, generating clear deliverables, and applying targeted research methods. The stages appear below.
 
-\section{Tool Selection}
-This stage identifies the libraries and frameworks that best balance accessibility, security and ease of integration for a browser-based, face-recognition password manager.
-
-\subsection*{Core Facial-Recognition Library}
-\begin{itemize}
-  \item \textbf{face-api.js}. Processes all images in the browser, eliminating external transmission of biometric data and thereby strengthening privacy. The library integrates seamlessly with modern JavaScript frameworks (e.g.\ React) and its lightweight, modular design supports real-time inference, essential for an accessibility-centred application.
-  \item Alternatives such as \textbf{OpenCV (Java)} and \textbf{face\_recognition (Python)} were benchmarked, yet \texttt{face-api.js} offered the best balance of privacy, performance and client-side deployment convenience for this use case.
-\end{itemize}
-
-\subsection*{Front-End Stack}
-\begin{itemize}
-  \item \textbf{React} \& \textbf{TypeScript}. Provide a component-based architecture with static typing that improves maintainability, refactoring safety and long-term scalability.
-  \item \textbf{Vite}. A fast build tool and dev server that offers near-instant hot-module reloading, accelerating iterative UI development.
-  \item \textbf{Tailwind CSS}. Utility-first styling ensures a consistent design system and simplifies compliance with WCAG colour-contrast and spacing requirements.
-  \item \textbf{Axios} \& \textbf{SWR}. Axios handles HTTP requests; SWR (“stale-while-revalidate”) supplies efficient client-side caching and auto-revalidation, improving perceived performance.
-  \item \textbf{React-Hot-Toast} \& \textbf{React-Icons}. Lightweight libraries for accessible status notifications and vector icons, enhancing feedback without heavy dependencies.
-\end{itemize}
-
-\subsection*{Back-End Stack}
-\begin{itemize}
-  \item \textbf{Node.js \& Express}. A minimal, well-known HTTP framework that pairs naturally with a TypeScript codebase and supports rapid prototyping of REST endpoints.
-  \item \textbf{Prisma ORM}. Provides type-safe data access, simplifying schema evolution and reducing boilerplate SQL queries.
-  \item \textbf{SQLite}. An embedded ACID-compliant database ideal for a single-user vault; encrypts easily with SQLCipher if required, and avoids the overhead of a client–server engine. (See Section~\ref{sec:database-selection} for a detailed comparison with alternative databases.)
-  \item \textbf{jsonwebtoken}. Issues and verifies stateless access tokens for authenticated API calls.
-  \item \textbf{Multer}. Handles multipart uploads (encrypted face images) without blocking the event loop.
-\end{itemize}
-
-\subsection*{Client-Side Cryptography}
-\begin{itemize}
-  \item \textbf{Crypto-JS}. Implements industry-standard primitives directly in the browser. We use \textbf{AES-256} for confidentiality and \textbf{PBKDF2} for key derivation, as justified in the literature review (see Section~\ref{sec:Cryptographic Security in Password Managers}) where their security properties are discussed in detail.
-\end{itemize}
-
-\subsection*{Development Tooling}
-\begin{itemize}
-  \item \textbf{ESLint} \& \textbf{typescript-eslint}. Enforce a consistent code style and surface common pitfalls early.
-  \item \textbf{ts-node} \& \textbf{ts-node-dev}. Provide rapid TypeScript execution with automatic reloads during back-end development.
-  \item \textbf{Concurrently}. Runs front-end and back-end watch tasks in parallel, streamlining the full-stack developer experience.
-\end{itemize}
-
-\subsection*{Why This Stack?}
-Together, these tools deliver:
-
-\begin{itemize}
-  \item \textbf{End-to-End Privacy}. All biometric data are processed and encrypted client-side; only descriptors and ciphertext reach the server.
-  \item \textbf{Accessibility by Design}. React, Tailwind and face-api.js enable responsive layouts, clear focus states and real-time feedback, directly supporting WCAG criteria.
-  \item \textbf{Security Hardening}. Proven cryptographic primitives (AES-256, PBKDF2, bcrypt) and JWT-based sessions protect stored credentials and transport channels.
-  \item \textbf{Developer Velocity}. A TypeScript mono-repo with hot reloading, linting and typed ORM reduces context switching and speeds iteration.
-\end{itemize}
-
-
-\section{Prototype Development}
-This phase describes the development of a fully functional, web-based password manager that addresses usability and accessibility barriers for individuals with cognitive and motor disabilities. The prototype utilizes a React/TypeScript frontend and Node.js/Express/TypeScript backend architecture to maximize maintainability and robustness. Key deliverables in this stage include:
-
-\begin{itemize}
-  \item \textbf{Face-authentication module:} Users authenticate through face-api.js-based facial recognition that extracts and compares 128-dimensional face descriptors. This removes the burden of remembering complex textual passwords while implementing AES-256 encryption with PBKDF2 key derivation for the secure transmission of biometric data.
-  
-  \item \textbf{Credential-management system:} Client-side AES-256-CBC encryption secures stored credentials, with a separation between encrypted frontend data and backend storage using Prisma ORM with SQLite. User-specific encryption keys are derived from user ID, email, and application secrets.
-  
-  \item \textbf{Password-generation tool:} An integrated utility produces cryptographically strong passwords with configurable complexity settings, allowing users to generate unique passwords without cognitive burden.
-  
-  \item \textbf{Accessible user interface (UI):} The React-based interface with Tailwind CSS follows Web Content Accessibility Guidelines (WCAG) to ensure usability, especially for users facing cognitive or motor challenges. The design implements keyboard navigation, screen reader compatibility, and simplified workflow patterns.
-\end{itemize}
-
-
-\section{Database Selection}
-Choosing an efficient, secure database to manage user credentials forms a crucial component of the project. After evaluating multiple options against performance, security, scalability and integration criteria, the project currently employs:
-
-\begin{itemize}
-  \item \textbf{SQLite:} Adopted for the initial prototype because of its simplicity, lightweight footprint and suitability for local client-side storage.
-  \item \textbf{PostgreSQL:} Evaluated for future scenarios that demand greater scalability, flexible data models and larger datasets.
-\end{itemize}
-
-Both MongoDB and Couchbase Lite were evaluated but not carried forward:
-
-\begin{itemize}
-  \item \textbf{MongoDB:} Although MongoDB offers flexible JSON-style storage and horizontal scaling, it requires a standalone \texttt{mongod} server process with a substantial memory footprint (1-2 GB RAM even under modest loads), and at-rest encryption is only available in the Enterprise edition, needing external disk- or field-level encryption and hardened defaults. These characteristics conflict with the prototype's goal of a lightweight, offline-first client vault.
-  \item \textbf{Couchbase Lite:} While Couchbase Lite embeds a document store with built-in AES-256 encryption and runs fine in a mobile sandbox, its on-disk metadata inflation and dependence on a Sync Gateway for cross-device sync introduce storage overhead and architectural complexity beyond the scope of the planned initial single-device prototype.
-\end{itemize}
 \section{WCAG 2.1 Compliance Implementation}
 \label{sec:wcag-compliance}
 
-A comprehensive approach to accessibility requires systematic mapping of features against established standards. The tables below provide a traceability matrix that maps the password manager’s features to the Web Content Accessibility Guidelines (WCAG) 2.1 success criteria. This matrix serves as both a design reference and a verification tool to ensure all accessibility requirements are addressed in the implementation phase.
+A comprehensive approach to accessibility requires systematic mapping of features against established standards. The tables below provide a traceability matrix that maps the password manager's features to the Web Content Accessibility Guidelines (WCAG) 2.1 success criteria. This matrix serves as both a design reference and a verification tool to ensure all accessibility requirements are addressed in the implementation phase.
 
 \begin{table}[htbp]
   \centering
@@ -206,7 +128,7 @@ A comprehensive approach to accessibility requires systematic mapping of feature
     2.4.4 Link Purpose 
       & A 
       & External links in footer/help 
-      & Link text describes destination (e.g.\ “WCAG Quick-Ref”) 
+      & Link text describes destination (e.g.\ "WCAG Quick-Ref") 
       & \cmark \\ \hline
     
     2.4.7 Focus Visible 
@@ -236,7 +158,7 @@ A comprehensive approach to accessibility requires systematic mapping of feature
     3.3.2 Labels or Instructions 
       & A 
       & All form inputs, face capture 
-      & Clear labels (e.g.\ “Email Address”), helper text 
+      & Clear labels (e.g.\ "Email Address"), helper text 
       & \cmark \\ \hline
     
     4.1.1 Parsing 
@@ -256,6 +178,90 @@ A comprehensive approach to accessibility requires systematic mapping of feature
 \end{table}
 
 \FloatBarrier
+
+\section{Tool Selection}
+This stage identifies the libraries and frameworks that best balance accessibility, security and ease of integration for a browser-based, face-recognition password manager, informed by the WCAG requirements established above.
+
+\subsection*{Core Facial-Recognition Library}
+\begin{itemize}
+  \item \textbf{face-api.js}. In the browser we load only \texttt{ssdMobilenetv1} to check
+  that a face is present. The encrypted frame is then uploaded,
+  decrypted on the server, and the full models
+  (\texttt{tinyFaceDetector}, \texttt{faceLandmark68Net},
+  \texttt{faceRecognitionNet}) run there to extract the 128-D
+  descriptor.  No plaintext biometric image is stored.
+
+  \item Alternatives such as \textbf{OpenCV (Java)} and \textbf{face\_recognition (Python)} were benchmarked, yet \texttt{face-api.js} offered the best balance of privacy, performance and client-side deployment convenience for this use case.
+\end{itemize}
+
+\subsection*{Front-End Stack}
+\begin{itemize}
+  \item \textbf{React} \& \textbf{TypeScript}. Provide a component-based architecture with static typing that improves maintainability, refactoring safety and long-term scalability.
+  \item \textbf{Vite}. A fast build tool and dev server that offers near-instant hot-module reloading, accelerating iterative UI development.
+  \item \textbf{Tailwind CSS}. Utility-first styling ensures a consistent design system and simplifies compliance with WCAG colour-contrast and spacing requirements.
+  \item \textbf{Axios} \& \textbf{SWR}. Axios handles HTTP requests; SWR ("stale-while-revalidate") supplies efficient client-side caching and auto-revalidation, improving perceived performance.
+  \item \textbf{React-Hot-Toast} \& \textbf{React-Icons}. Lightweight libraries for accessible status notifications and vector icons, enhancing feedback without heavy dependencies.
+\end{itemize}
+
+\subsection*{Back-End Stack}
+\begin{itemize}
+  \item \textbf{Node.js \& Express}. A minimal, well-known HTTP framework that pairs naturally with a TypeScript codebase and supports rapid prototyping of REST endpoints.
+  \item \textbf{Prisma ORM}. Provides type-safe data access, simplifying schema evolution and reducing boilerplate SQL queries.
+  \item \textbf{SQLite}. An embedded ACID-compliant database ideal for a single-user vault; encrypts easily with SQLCipher if required, and avoids the overhead of a client–server engine. (See Section~\ref{sec:database-selection} for a detailed comparison with alternative databases.)
+  \item \textbf{jsonwebtoken}. Issues and verifies stateless access tokens for authenticated API calls.
+  \item \textbf{Multer}. Handles multipart uploads (encrypted face images) without blocking the event loop.
+\end{itemize}
+
+\subsection*{Client-Side Cryptography}
+\begin{itemize}
+  \item \textbf{Crypto-JS}. Implements industry-standard primitives directly in the browser. We use \textbf{AES-256} for confidentiality and \textbf{PBKDF2} for key derivation, as justified in the literature review (see Section~\ref{sec:crypto}) where their security properties are discussed in detail.
+\end{itemize}
+
+\subsection*{Development Tooling}
+\begin{itemize}
+  \item \textbf{ESLint} \& \textbf{typescript-eslint}. Enforce a consistent code style and surface common pitfalls early.
+  \item \textbf{ts-node} \& \textbf{ts-node-dev}. Provide rapid TypeScript execution with automatic reloads during back-end development.
+  \item \textbf{Concurrently}. Runs front-end and back-end watch tasks in parallel, streamlining the full-stack developer experience.
+\end{itemize}
+
+\subsection*{Why This Stack?}
+Together, these tools deliver:
+
+\begin{itemize}
+  \item \textbf{End-to-End Privacy}. All biometric data are processed and encrypted client-side; only descriptors and ciphertext reach the server.
+  \item \textbf{Accessibility by Design}. React, Tailwind and face-api.js enable responsive layouts, clear focus states and real-time feedback, directly supporting WCAG criteria.
+  \item \textbf{Security Hardening}. Proven cryptographic primitives (AES-256, PBKDF2, bcrypt) and JWT-based sessions protect stored credentials and transport channels.
+  \item \textbf{Developer Velocity}. A TypeScript mono-repo with hot reloading, linting and typed ORM reduces context switching and speeds iteration.
+\end{itemize}
+
+\section{Database Selection}
+\label{sec:database-selection}
+Choosing an efficient, secure database to manage user credentials forms a crucial component of the project. After evaluating multiple options against performance, security, scalability and integration criteria, the project currently employs:
+
+\begin{itemize}
+  \item \textbf{SQLite:} Adopted for the initial prototype because of its simplicity, lightweight footprint and suitability for local client-side storage.
+  \item \textbf{PostgreSQL:} Evaluated for future scenarios that demand greater scalability, flexible data models and larger datasets.
+\end{itemize}
+
+Both MongoDB and Couchbase Lite were evaluated but not carried forward:
+
+\begin{itemize}
+  \item \textbf{MongoDB:} Although MongoDB offers flexible JSON-style storage and horizontal scaling, it requires a standalone \texttt{mongod} server process with a substantial memory footprint (1-2 GB RAM even under modest loads), and at-rest encryption is only available in the Enterprise edition, needing external disk- or field-level encryption and hardened defaults. These characteristics conflict with the prototype's goal of a lightweight, offline-first client vault.
+  \item \textbf{Couchbase Lite:} While Couchbase Lite embeds a document store with built-in AES-256 encryption and runs fine in a mobile sandbox, its on-disk metadata inflation and dependence on a Sync Gateway for cross-device sync introduce storage overhead and architectural complexity beyond the scope of the planned initial single-device prototype.
+\end{itemize}
+
+\section{Prototype Development}
+This phase describes the development of a fully functional, web-based password manager that addresses usability and accessibility barriers for individuals with cognitive and motor disabilities. The prototype utilizes a React/TypeScript frontend and Node.js/Express/TypeScript backend architecture to maximize maintainability and robustness. Key deliverables in this stage include:
+
+\begin{itemize}
+  \item \textbf{Face-authentication module:} Users authenticate through face-api.js-based facial recognition that extracts and compares 128-dimensional face descriptors. This removes the burden of remembering complex textual passwords while implementing AES-256 encryption with PBKDF2 key derivation for the secure transmission of biometric data.
+  
+  \item \textbf{Credential-management system:} Client-side AES-256-CBC encryption secures stored credentials, with a separation between encrypted frontend data and backend storage using Prisma ORM with SQLite. User-specific encryption keys are derived from user ID, email, and application secrets.
+  
+  \item \textbf{Password-generation tool:} An integrated utility produces cryptographically strong passwords with configurable complexity settings, allowing users to generate unique passwords without cognitive burden.
+  
+  \item \textbf{Accessible user interface (UI):} The React-based interface with Tailwind CSS follows Web Content Accessibility Guidelines (WCAG) to ensure usability, especially for users facing cognitive or motor challenges. The design implements keyboard navigation, screen reader compatibility, and simplified workflow patterns.
+\end{itemize}
 
 \section{Future Expansion and Scalability}
 If the browser-based prototype proves successful, the next plan is to
@@ -302,5 +308,3 @@ Planned next steps include:
 %% en geef het een gepaste titel.
 
 % \lipsum[21-25]
-
-

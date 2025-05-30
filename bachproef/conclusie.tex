@@ -17,39 +17,36 @@
 \section{Discussion}
 
 \paragraph{Answer to the research question.}
-The thesis asked: \emph{How can face-recognition technology be effectively integrated into a password manager to improve accessibility for individuals with cognitive and motor disabilities?}
-The prototype demonstrates that a fully client-side pipeline—camera capture, descriptor extraction via \texttt{face-api.js}, comparison against a locally stored template, and AES-256 encryption of all vaulted secrets can replace a conventional master password while keeping both biometric data and credentials on the user’s device.
-This design removes the memory and typing requirements that make text-based authentication difficult for the target audience and therefore directly addresses the accessibility gap identified in Chapter 2.
+This thesis asked \emph{how face-recognition technology can be integrated into a password manager to improve accessibility for people with cognitive and motor disabilities}.  
+The prototype shows that a \textbf{hybrid} pipeline can replace the master password without sacrificing security.  
+(1) The browser captures a webcam image, (2) performs lightweight face detection to confirm user presence, (3) transmits an encrypted selfie to the server, and (4) the backend extracts a 128-dimensional descriptor, compares it with the stored template, and keeps both biometric data and credentials protected with end-to-end AES-256 encryption.  
+By substituting a face for a complex string, the system removes cognitive and physical barriers identified in Chapter~\ref{ch:stand-van-zaken}, while encrypted storage and server-side verification retain strong guarantees against unauthorized access.
 
 \paragraph{Contribution and added value.}
-The work contributes an openly documented proof-of-concept that combines three elements rarely found together in existing password managers:
+The work delivers an openly documented proof of concept that combines elements rarely found together in existing password managers:
 
 \begin{itemize}
-\item \textbf{Privacy-preserving biometrics:} all face-recognition inference runs entirely in the browser; no raw images or embeddings leave the device.
-\item \textbf{End-to-end cryptography:} PBKDF2-derived AES keys and zero plaintext outside RAM fulfil the project goal of \`\`zero plaintext secrets outside the browser''.
-\item \textbf{WCAG-aligned interface:} colour contrast, focus indicators, and enlarged click targets satisfy Level AA success criteria, making day-to-day credential management feasible for users with motor or cognitive impairments.
+  \item \textbf{Privacy-aware hybrid biometrics:} Only a lightweight face-detection model runs in the browser; full descriptor extraction and matching occur on the server, where the environment is easier to secure and audit. Raw selfies are encrypted client-side before transit, so unencrypted biometrics never cross the wire.
+  \item \textbf{End-to-end cryptography:} PBKDF2-derived AES-256 keys ensure that neither credentials nor biometric images are ever stored in plaintext, meeting the design goal of ``zero readable secrets outside RAM'' (see Section~\ref{sec:crypto}).
+  \item \textbf{WCAG-aligned interface:} High-contrast colour palette, focus indicators, and enlarged click targets satisfy Level~AA success criteria, enabling day-to-day credential management for users with motor or cognitive impairments.
 \end{itemize}
-
-Together, these elements show that modern web technologies can deliver an accessible, hands-free login experience without forcing users to trust cloud services with either passwords or biometrics. For practitioners in accessible cybersecurity, the prototype serves as a reference architecture illustrating how biometric convenience, strong cryptography, and standards-based accessibility can coexist.
 
 \paragraph{Critical reflection.}
-The outcome aligns with initial expectations that client-side biometrics would lower cognitive and physical barriers; however, several limitations remain:
-
+Initial planning assumed the entire face-recognition pipeline could run in the browser. Commit-level profiling showed this was \emph{feasible} but sub-optimal:  
 \begin{itemize}
-\item \textbf{Empirical depth.} Functional tests and automated accessibility audits were completed, but no longitudinal user study with people who have disabilities has yet been conducted, so real-world effectiveness is still unverified.
-\item \textbf{Environmental robustness.} Accuracy under low-light conditions, diverse camera qualities, and occlusions (e.g.\ face masks or tinted glasses) has not been systematically measured.
-\item \textbf{Device reach.} The current implementation presumes a webcam-equipped desktop browser; adaptation to mobile or low-resource devices is untested.
+  \item \textbf{Security.} Moving descriptor extraction and comparison to the server adds a second line of defence; client-only verification could be bypassed on a compromised device.
+  \item \textbf{Performance.} Large model downloads (10-15 MB) and 100-200 MB of browser RAM would impair older hardware, whereas a single server instance amortises that cost.
 \end{itemize}
 
-\paragraph{Open questions and future directions.}
-The project raises several research questions worth pursuing:
 
-\begin{itemize}
-\item Which fallback mechanisms (PIN, NFC token, or delegated recovery) best balance accessibility with security when the camera is unavailable?
-\item Can optional, end-to-end-encrypted cloud sync be added without undermining the privacy guarantees that are central to the current design?
-\item What liveness-detection techniques (e.g.\ challenge–response animations or sensor-fusion depth cues) offer the best spoof-resistance for an entirely client-side solution?
-\end{itemize}
+\paragraph{Open questions and future work.}
+\begin{enumerate}
+  \item \textbf{Usability research:} How do users with cognitive or motor impairments perceive the hybrid approach over extended periods?
+  \item \textbf{Environmental robustness:} What accuracy trade-offs arise under poor lighting or with face coverings, and how should thresholds adapt?
+  \item \textbf{Spoof resistance in a hybrid pipeline:} Which liveness-detection techniques (e.g.\ randomised blink prompts, depth from stereo, device-sensor fusion) provide the best defence against presentation attacks when only anti-spoof checks run client-side?
+\end{enumerate}
 
 \paragraph{Conclusion.}
-By showing a feasible path toward a WCAG-conform, privacy-first password manager guarded by a face instead of a master password, this work extends the accessible-authentication literature with a concrete and reproducible artefact. While further user studies and technical hardening are required, the results indicate that browser-based face recognition can meaningfully lower barriers to secure credential management for people with cognitive and motor disabilities, and thus merit deeper exploration in both academic and commercial settings.
-
+The prototype demonstrates that face recognition can meaningfully lower authentication barriers while maintaining rigorous security. \\ 
+A hybrid architecture that combines client-side detection, server-side verification, and fully encrypted storage offers a practical balance between usability, privacy, and threat resistance. \\ 
+Future work should incorporate robust liveness detection, conduct wider empirical studies with the target demographic, and investigate an optional offline mode, all without weakening the security guarantees achieved here.\\

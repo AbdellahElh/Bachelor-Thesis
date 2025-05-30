@@ -21,5 +21,7 @@ Add a short GDPR compliance paragraph: biometric data are “special category”
 
 State that the prototype is for academic evaluation only and is not production-ready security software.
 
-fix roadmap
 fix references
+fix placing of imgs
+compare sections with excel doc
+add multer in svz?

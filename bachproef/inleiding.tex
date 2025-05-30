@@ -10,13 +10,14 @@ In today's digital age, authentication is a crucial element of cybersecurity. Tr
 \subsection{Context and Background}
 The increasing reliance on online services has amplified the need for secure and accessible authentication solutions. Conventional methods, such as passwords, often fail to accommodate the unique needs of users with disabilities. Cognitive impairments may hinder memory recall, while motor disabilities can complicate the physical act of typing. These challenges underscore the necessity for an alternative approach, one that minimizes cognitive and physical burdens without compromising security. In this context, the proposed research explores the use of face recognition technology as a viable solution to enhance digital authentication.
 
+\clearpage
 \subsection{Justification of the Topic}
-This research focuses exclusively on evaluating face recognition as an alternative to traditional master passwords in a web-based password manager. Key points include:
+This research focuses on evaluating face recognition as an alternative to traditional master passwords in a web-based password manager. Key points include:
 \begin{itemize}
   \item \textbf{Target Group:} All users of password managers, with a special focus on individuals with cognitive and motor disabilities.
   \item \textbf{Tool Selection:} The implementation leverages several key technologies chosen for their specific advantages:
   \begin{itemize}
-    \item \texttt{face-api.js}: A lightweight, browser-based face recognition library that processes facial data locally, ensuring user privacy by eliminating the need for server-side processing of biometric data.
+    \item \texttt{face-api.js}: A lightweight library that performs initial face detection in the browser, then hands encrypted images to the server where full descriptor extraction and matching occur. This hybrid split minimises client load while keeping sensitive biometric processing in a controlled backend environment.
     \item \texttt{TypeScript}: Selected for its strong typing system that enhances code reliability and maintainability, while being fully compatible with modern web standards.
     \item \texttt{SQLite}: Chosen for local credential storage to provide a self-contained solution that doesn't rely on external database services.
     \item \texttt{bcrypt}: Utilized for secure password hashing, providing robust protection against common attacks such as rainbow table and brute force attempts.
@@ -26,7 +27,9 @@ This research focuses exclusively on evaluating face recognition as an alternati
 \section{\IfLanguageName{dutch}{Probleemstelling}{Problem Statement}}%
 \label{sec:probleemstelling}
 
-Traditional password systems impose substantial cognitive and physical demands on users, particularly those with disabilities. The inherent complexity of creating, remembering, and entering passwords can significantly reduce user autonomy and lead to security vulnerabilities. This research seeks to determine how face recognition technology can replace traditional passwords in a way that overcomes these challenges—ultimately providing a more accessible and secure solution for the target group.
+Traditional password systems impose substantial cognitive and physical demands on users, particularly those with disabilities. The inherent complexity of creating, remembering, and entering passwords can significantly reduce user autonomy and lead to security vulnerabilities. This research seeks to determine how face recognition technology can replace traditional passwords in a way that overcomes these challenges, ultimately providing a more accessible and secure solution for the target group.
+
+\clearpage
 
 \section{\IfLanguageName{dutch}{Onderzoeksvraag}{Research Question}}%
 \label{sec:onderzoeksvraag}
@@ -40,7 +43,7 @@ To explore this question further, the following sub-questions will be addressed:
 \begin{enumerate}
   \item What specific challenges do individuals with cognitive and motor disabilities face with traditional password systems?
   \item How can facial recognition be technically implemented to maintain end-to-end security while eliminating master passwords?
-  \item What trade-offs exist between accessibility, security, and usability when implementing browser-based facial recognition?
+  \item How does the prototype’s user interface conform to WCAG 2.1 accessibility guidelines, and what concrete design choices were made during development to support users with cognitive and motor disabilities?
   \item How effectively does the implemented client-side face recognition and cryptographic system ensure privacy and security, especially in preventing unauthorized access to biometric data and user credentials?
 \end{enumerate}
 
@@ -54,6 +57,7 @@ The primary objective of this thesis is to design and develop a proof-of-concept
   \item \textbf{User-Friendly Interface:} Adhering to Web Content Accessibility Guidelines (WCAG) to ensure ease of use for the target audience.
 \end{itemize}
 
+\clearpage
 \section{\IfLanguageName{dutch}{Opzet van deze bachelorproef}{Structure of this Bachelor Thesis}}
 \label{sec:opzet-bachelorproef}
 
@@ -61,18 +65,19 @@ The remainder of this bachelor thesis is organised as follows:
 
 \begin{description}
   \item[Chapter~\ref{ch:stand-van-zaken} \textemdash\ State of the Art] provides a targeted literature review.  
-        It surveys traditional and biometric authentication methods,  
+        It reviews traditional and biometric authentication methods,  
         analyses the specific accessibility challenges these methods pose,  
-        reviews face-recognition algorithms and libraries,  
+        discusses face-recognition algorithms and libraries,  
         compares leading JavaScript, Python and Java implementations, and  
         summarises security, cryptographic and WCAG 2.1 accessibility requirements that shape the remainder of the work.
 
   \item[Chapter~\ref{ch:methodologie} \textemdash\ Methodology] explains the research design and technical approach.  
-        It justifies the selection of \texttt{face-api.js}, details the agile, TypeScript-based prototype development process, motivates the choice of SQLite for local credential storage, and describes the success metrics (accessibility gain, security strength and usability) that will later be evaluated.
+        It justifies the selection of \texttt{face-api.js} and other technologies, details the agile, TypeScript-based prototype development process, motivates the choice of SQLite for local credential storage, and describes the success metrics (accessibility gain, security strength and usability).
 
   \item[Chapter~\ref{ch:implementatie} \textemdash\ Prototype Implementation] documents the architecture of the web-based password manager.  
         It covers the facial-authentication workflow, from backend to frontend; the cryptographic handling of credentials with \texttt{bcrypt}, and the WCAG-compliant user interface.
 
-  \item[Chapter~\ref{ch:conclusie} \textemdash\ Conclusion] reports the empirical results and synthesises the findings. 
-        It presents functional tests and an accessibility study. The outcomes are discussed against the success metrics limitations are reflected upon, and avenues for future work are proposed.
+  \item[Chapter~\ref{ch:conclusie} \textemdash\ Conclusion] reports the results and discusses the findings.  
+        It compares the outcomes with the expected results, explains why the development did not fully meet those expectations, reflects on the limitations, and proposes ideas for future work.
+
 \end{description}

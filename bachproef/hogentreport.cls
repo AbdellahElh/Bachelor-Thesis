@@ -336,8 +336,10 @@
         not running XeLaTeX/LuaLaTeX: using native fonts}
 
     \RequirePackage[defaultfam,tabular,lining]{montserrat}
-    \RequirePackage{firamath}
-    \RequirePackage{sfmath} % Fallback sans serif math font
+    
+    % Try to load firamath and sfmath packages, if available
+    \IfFileExists{firamath.sty}{\RequirePackage{firamath}}{}
+    \IfFileExists{sfmath.sty}{\RequirePackage{sfmath}}{}  % Fallback sans serif math font
 
     \RequirePackage[T1]{fontenc}
     \renewcommand*\oldstylenums[1]{{\fontfamily{Montserrat-TOsF}\selectfont #1}}
