@@ -20,7 +20,7 @@
 This thesis asked \emph{how face-recognition technology can be integrated into a password manager to improve accessibility for people with cognitive and motor disabilities}.  
 The prototype shows that a \textbf{hybrid} pipeline can replace the master password without sacrificing security.  
 (1) The browser captures a webcam image, (2) performs lightweight face detection to confirm user presence, (3) transmits an encrypted selfie to the server, and (4) the backend extracts a 128-dimensional descriptor, compares it with the stored template, and keeps both biometric data and credentials protected with end-to-end AES-256 encryption.  
-By substituting a face for a complex string, the system removes cognitive and physical barriers identified in Chapter~\ref{ch:stand-van-zaken}, while encrypted storage and server-side verification retain strong guarantees against unauthorized access.
+By replacing a textual password with facial recognition, the system removes cognitive and physical barriers identified in Chapter~\ref{ch:stand-van-zaken}, while encrypted storage and server-side verification retain strong guarantees against unauthorized access.
 
 \subsection{Contribution and added value.}
 The work delivers an openly documented proof of concept that combines elements rarely found together in existing password managers:
@@ -32,7 +32,7 @@ The work delivers an openly documented proof of concept that combines elements r
 \end{itemize}
 
 \subsection{Critical reflection.}
-Initial planning assumed the entire face-recognition pipeline could run in the browser. Commit-level profiling showed this was \emph{feasible} but sub-optimal:  
+Initial planning assumed the entire face-recognition pipeline could run in the browser. This approach was technically \emph{feasible} but not optimal:  
 \begin{itemize}
   \item \textbf{Security.} Moving descriptor extraction and comparison to the server adds a second line of defence; client-only verification could be bypassed on a compromised device.
   \item \textbf{Performance.} Large model downloads (10-15 MB) and 100-200 MB of browser RAM would impair older hardware, whereas a single server instance amortises that cost.
@@ -49,4 +49,4 @@ Initial planning assumed the entire face-recognition pipeline could run in the b
 \subsection{Conclusion.}
 The prototype demonstrates that face recognition can meaningfully lower authentication barriers while maintaining rigorous security. \\ 
 A hybrid architecture that combines client-side detection, server-side verification, and fully encrypted storage offers a practical balance between usability, privacy, and threat resistance. \\ 
-Future work should incorporate robust liveness detection, conduct wider empirical studies with the target demographic, and investigate an optional offline mode, all without weakening the security guarantees achieved here.\\
+Future implementations should incorporate robust liveness detection, conduct wider empirical studies with the target demographic, and investigate an optional offline mode, all without weakening the security guarantees achieved here.\\
