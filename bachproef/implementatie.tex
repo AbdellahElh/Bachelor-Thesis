@@ -47,18 +47,48 @@ From a privacy perspective, facial data is classified as a special category of p
 \subsection{Implementation roadmap}
 Development progressed through the following incremental phases:
 
-\begin{enumerate}[label=\textbf{Phase~\arabic*:}, leftmargin=2.5em]
-  \item \emph{Requirements \& accessibility goals} - zero plaintext outside the browser and WCAG 2.2 AA compliance.%
-  \item Dual-repo setup (\texttt{pwd-manager-frontend} \& \texttt{pwd-manager-backend}) merged into a monorepo with Nx, CI pipeline (ESLint, tests, Docker).%
-  \item Core architecture: React + Vite SPA, Express API, Prisma models \emph{User} \& \emph{Credential}.%
-  \item Face-authentication MVP using Tiny MobileNet V1 and in-browser matching.%
-  \item End-to-end client-side cryptography (PBKDF2 $\rightarrow$ AES-256-CBC).%
-  \item Credential-vault CRUD with optimistic UI updates and password-strength meter.%
-  \item Transport security and DevOps: Nginx + Let's Encrypt, HSTS, CSP, multi-stage Docker images.%
-  \item Accessibility pass and UI refinements.%
-  \item Backup/restore via encrypted JSON and initial sync stubs for future cloud integration.%
-  \item Quality assurance: Vitest, Jest, Playwright end-to-end tests, CI coverage $>$90\,\%.%
+\begin{enumerate}[label=\textbf{Phase~\arabic*:}, leftmargin=2.8em]
+
+  \item \emph{Foundation \& Project Setup}  
+        Create two repositories (\texttt{pwd-manager-frontend}, \texttt{pwd-manager-backend}) with a common Nx
+        workspace, React\,+\,TypeScript front-end and Node.js\,+\,Express back-end.
+        Initialise Prisma with an SQLite schema that removes the traditional password field
+        and adds 128-D face-descriptor columns.
+
+  \item \emph{Core Authentication Pipeline}  
+        Load face-api.js models at server start, expose registration and login endpoints, and
+        integrate in-browser face matching (Tiny MobileNet V1) with React context for
+        session state.
+
+  \item \emph{Client-Side Cryptography}  
+        Implement zero-knowledge design: PBKDF2-derived keys and AES-256-CBC encryption
+        in the browser, mirrored by decryption helpers on the back-end
+        (see Section~\ref{sec:crypto} for the rationale behind AES and PBKDF2).
+
+  \item \emph{Credential Vault CRUD}  
+        Add REST routes for creating, reading, updating and deleting encrypted credentials.
+        Provide optimistic UI updates, a password-strength meter, and toast notifications.
+
+  \item \emph{Security Hardening}  
+        Introduce HTTPS enforcement, secure headers, JWT authentication middleware,
+        unique user-specific encryption keys, and detailed error logging for crypto
+        operations.  Update \texttt{.env.example} and validation checks for all secrets.
+
+  \item \emph{UI/UX \& Accessibility Pass}  
+        Refactor login and registration forms, apply Tailwind design tokens, fix colour-contrast,
+        tab order and ARIA labels to meet WCAG 2.2 AA.
+
+  \item \emph{Data Portability \& Sync Stubs}  
+        Implement backup and restore via encrypted JSON, add preliminary endpoints for
+        future cross-device synchronisation, and optimise user-image storage.
+
+  \item \emph{Production Readiness}  
+        Multi-stage Dockerfiles, Nginx reverse proxy with HSTS and CSP, Vitest + Jest unit
+        tests, Playwright end-to-end tests, and a CI pipeline targeting \textgreater90 \% coverage.
+        Final README and code clean-up.
+
 \end{enumerate}
+
 
 
 \subsection{Database schema}
