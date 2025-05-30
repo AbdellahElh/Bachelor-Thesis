@@ -184,7 +184,7 @@ This stage identifies the libraries and frameworks that best balance accessibili
 
 \subsection*{Core Facial-Recognition Library}
 \begin{itemize}
-  \item \textbf{face-api.js}. In the browser we load only \texttt{ssdMobilenetv1} to check
+  \item \textbf{face-api.js}. In the browser only \texttt{ssdMobilenetv1} is loaded to check
   that a face is present. The encrypted frame is then uploaded,
   decrypted on the server, and the full models
   (\texttt{tinyFaceDetector}, \texttt{faceLandmark68Net},
@@ -203,6 +203,7 @@ This stage identifies the libraries and frameworks that best balance accessibili
   \item \textbf{React-Hot-Toast} \& \textbf{React-Icons}. Lightweight libraries for accessible status notifications and vector icons, enhancing feedback without heavy dependencies.
 \end{itemize}
 
+\clearpage
 \subsection*{Back-End Stack}
 \begin{itemize}
   \item \textbf{Node.js \& Express}. A minimal, well-known HTTP framework that pairs naturally with a TypeScript codebase and supports rapid prototyping of REST endpoints.
@@ -214,7 +215,7 @@ This stage identifies the libraries and frameworks that best balance accessibili
 
 \subsection*{Client-Side Cryptography}
 \begin{itemize}
-  \item \textbf{Crypto-JS}. Implements industry-standard primitives directly in the browser. We use \textbf{AES-256} for confidentiality and \textbf{PBKDF2} for key derivation, as justified in the literature review (see Section~\ref{sec:crypto}) where their security properties are discussed in detail.
+  \item \textbf{Crypto-JS}. Implements industry-standard primitives directly in the browser. The implementation employs \textbf{AES-256} for confidentiality and \textbf{PBKDF2} for key derivation, as justified in the literature review (see Section~\ref{sec:crypto}) where their security properties are discussed in detail.
 \end{itemize}
 
 \subsection*{Development Tooling}
@@ -224,15 +225,16 @@ This stage identifies the libraries and frameworks that best balance accessibili
   \item \textbf{Concurrently}. Runs front-end and back-end watch tasks in parallel, streamlining the full-stack developer experience.
 \end{itemize}
 
-\subsection*{Why This Stack?}
+\subsection*{Rationale for Technology Stack}
 Together, these tools deliver:
 
 \begin{itemize}
   \item \textbf{End-to-End Privacy}. All biometric data are processed and encrypted client-side; only descriptors and ciphertext reach the server.
   \item \textbf{Accessibility by Design}. React, Tailwind and face-api.js enable responsive layouts, clear focus states and real-time feedback, directly supporting WCAG criteria.
-  \item \textbf{Security Hardening}. Proven cryptographic primitives (AES-256, PBKDF2, bcrypt) and JWT-based sessions protect stored credentials and transport channels.
-  \item \textbf{Developer Velocity}. A TypeScript mono-repo with hot reloading, linting and typed ORM reduces context switching and speeds iteration.
+  \item \textbf{Security Hardening}. Proven cryptographic primitives (AES-256, PBKDF2, bcrypt) and JWT-based sessions protect stored credentials and transport channels.  \item \textbf{Developer Velocity}. A TypeScript mono-repo with hot reloading, linting and typed ORM reduces context switching and speeds iteration.
 \end{itemize}
+
+This comprehensive tool selection and technical approach answers sub-question~\ref{sq:accessibility} by demonstrating how the prototype's user interface conforms to WCAG 2.1 accessibility guidelines through systematic implementation of accessibility features, responsive design patterns, and careful attention to cognitive and motor accessibility needs.
 
 \section{Database Selection}
 \label{sec:database-selection}
@@ -307,4 +309,3 @@ Planned next steps include:
 %% Maak voor elke fase (behalve het literatuuronderzoek) een NIEUW HOOFDSTUK aan
 %% en geef het een gepaste titel.
 
-% \lipsum[21-25]

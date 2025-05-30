@@ -15,7 +15,10 @@ Commonly used methods include knowledge-based authentication (passwords), posses
 biometric methods like fingerprints and facial recognition \autocite{Pant2022}. Passwords remain dominant due to 
 their simplicity and widespread acceptance, but face security issues including password reuse, phishing, and 
 brute-force attacks \autocite{Ophoff2021}. For users with cognitive or motor disabilities, these issues are 
-further complicated by difficulties in recalling or accurately inputting passwords \autocite{Rochford2014}.
+further complicated by difficulties in recalling or accurately inputting passwords \autocite{Rochford2014}.\\
+These observations answer sub-question~\ref{sq:challenges} by clarifying which
+cognitive and motor barriers the new solution must overcome.
+
 
 \section{Accessibility Challenges in Authentication}
 Individuals with cognitive disabilities, such as memory disorders or conditions like dyslexia, often struggle with remembering complex passwords, resulting in frequent authentication failures and frustration \autocite{Farid2019, Ophoff2021}. Those with motor disabilities, including conditions like Parkinson's disease or cerebral palsy, face physical challenges in typing passwords accurately \autocite{Renaud2020}. The Web Content Accessibility Guidelines (WCAG) highlight the importance of designing authentication systems that minimize these cognitive and physical burdens \autocite{Brewer2023}.
@@ -26,7 +29,8 @@ Individuals with cognitive disabilities, such as memory disorders or conditions 
 Password managers simplify password management by securely storing and auto-filling credentials but commonly rely on a master password, perpetuating cognitive and motor accessibility issues. This approach is problematic for users who struggle with memory recall or precise typing \autocite{IALabs2024}. While MFA offers increased security, it often introduces additional complexity that further burdens users with disabilities. Current systems have limited inclusivity and accessibility, reinforcing the need for more intuitive solutions.
 
 \section{Facial Recognition Technology}
-Facial recognition works by identifying and verifying individuals from digital images or videos using various algorithmic approaches, including traditional image processing methods and modern deep learning techniques. Notable algorithms include Haar cascades, Eigenfaces, Local Binary Patterns Histograms (LBPH), and Convolutional Neural Networks (CNNs) \autocite{ElSayed2015}. The evolution of deep learning, particularly CNN-based approaches, has significantly enhanced accuracy and reliability, making facial recognition robust even under challenging conditions like variations in lighting, angle, or facial expressions \autocite{ZhangDlib2020}.
+Facial recognition works by identifying and verifying individuals from digital images or videos using various algorithmic approaches, including traditional image processing methods and modern deep learning techniques. Notable algorithms include Haar cascades, Eigenfaces, Local Binary Patterns Histograms (LBPH), and Convolutional Neural Networks (CNNs) \autocite{ElSayed2015}. The evolution of deep learning, particularly CNN-based approaches, has significantly enhanced accuracy and reliability, making facial recognition robust even under challenging conditions like variations in lighting, angle, or facial expressions \autocite{ZhangDlib2020}.\\
+
 
 \section{Face Recognition as a Biometric Solution}
 Biometric authentication, particularly facial recognition, is gaining popularity as it significantly reduces the cognitive and physical effort required by traditional password-based methods \autocite{Furnell2022}. 
@@ -54,6 +58,8 @@ While facial recognition enhances accessibility, it also introduces specific sec
 \begin{itemize}
 \item \textbf{Template Extraction Attacks:} These attacks aim to reconstruct biometric templates from stored embeddings, potentially compromising the entire authentication system. Even when templates are encrypted, side-channel attacks can leak information about the underlying biometric data \autocite{Mai2019, Dong2021}. As demonstrated by \textcite{Mai2019}, deep face templates previously thought to be secure can be reverse-engineered to recover recognizable face images, raising significant privacy concerns. Building on this work, \textcite{Dong2021} showed that high-definition face images can be generated from supposedly secure templates using advanced generative models.
 
+\clearpage
+
 \item \textbf{Model Inversion Attacks:} Adversaries can exploit machine learning models to regenerate facial images from stored embeddings or model parameters, effectively reversing the feature extraction process \autocite{Fredrikson2015, Zhang2020}. \textcite{Fredrikson2015} demonstrated that these attacks can leverage confidence information from ML models to reconstruct training data, while \textcite{Zhang2020} advanced this concept with generative model-inversion attacks against deep neural networks. This poses significant privacy risks as it may allow attackers to recreate recognizable facial images from supposedly secure numerical representations.
 
 \item \textbf{Spoofing Attacks:} Presentation attacks using photos or video recordings of legitimate users to deceive recognition systems \autocite{Kuznetsov2024}.
@@ -70,9 +76,10 @@ Modern mitigation strategies include:
 \item \textbf{Cancelable Biometrics:} Applying irreversible transformations to biometric templates before storage, allowing for template revocation if compromised. \textcite{Rathgeb2011} provide a comprehensive survey of these techniques, highlighting their importance in protecting biometric data while maintaining authentication accuracy.
 \end{itemize}
 
+\clearpage
+
 
 \section{Database Options for Client\textendash Side Password Storage}
-\label{sec:database-selection}
 
 A password manager must choose a local datastore that balances footprint,
 offline capability, security, and future synchronisation needs.  The five
@@ -109,6 +116,8 @@ crypto is required.  Misconfiguration has repeatedly exposed databases,
 underscoring the need for hardened defaults.  The
 server footprint makes MongoDB unsuitable for a secure, single-user password vault.
 
+\clearpage
+
 \subsection*{Couchbase Lite}
 Couchbase Lite embeds a document store inside the app and syncs through
 Sync Gateway when online \autocite{Pal2016}.  Its metadata inflates on-disk
@@ -128,7 +137,6 @@ This offloads database maintenance but requires Internet access for initial
 login and long-term storage.  Firestore therefore suits a multi-device,
 cloud-centric password manager but {\fontseries{sb}\selectfont cedes full data custody to Google}.
 
-\clearpage
 
 \section{Cryptographic Security in Password Managers}
 \label{sec:crypto}
@@ -155,6 +163,8 @@ AES-256 encrypts both passwords and face images, providing a large key space
 and proven resistance to cryptanalysis.  Defined in FIPS 197, AES remains the standard for protecting electronic data across government and
 industry \autocite{NISTFIPS197}. 
 
+\clearpage
+
 \subsubsection{Encryption Key Handling}  
 Each encryption key is derived in the browser at login and kept only in
 memory; it is never persisted or sent to the backend.  This client-centric
@@ -166,22 +176,27 @@ breach alone cannot expose decryption keys
 PBKDF2, specified in RFC 8018, transforms the user's secret into a strong
 256-bit key using 10\,000 iterations and a unique 16-byte salt.  Iterative
 key stretching slows dictionary attacks, while the salt thwarts rainbow
-tables \autocite{RFC8018}.
+tables \autocite{RFC8018}.\\
+
+This technologies answers sub-question~\ref{sq:implementation}, by detailing
+which recognition approaches are sufficiently accurate and performant for
+a web-based password manager.
 
 \section{Performance Benchmarks in Facial Biometrics}
 \label{sec:biometric-benchmarks}
 
-It is important to evaluate the security accuracy of the facial authentication. While a full-scale laboratory test of false acceptance and rejection rates is beyond the scope of our study, we can approximate expectations by citing published benchmarks from similar biometric systems. These provide a reference point for how our prototype should perform in terms of False Accept Rate (FAR) and False Reject Rate (FRR).
+It is important to evaluate the security accuracy of the facial authentication. While a full-scale laboratory test of false acceptance and rejection rates is beyond the scope of this study, published benchmarks from similar biometric systems provide reference performance targets for the prototype in terms of False Accept Rate (FAR) and False Reject Rate (FRR).
 
-\textbf{Windows Hello (IR Facial Login):} Microsoft's Windows Hello face authentication system, which uses infrared imaging, sets stringent hardware requirements with a FAR of less than 0.001\% (i.e., fewer than 1 in 100{,}000 impostor attempts succeed) \autocite{MicrosoftHelloDocs}. In practice, Microsoft reports a FRR under 5\% without liveness detection, and under 10\% when anti-spoofing measures are enabled \autocite{MicrosoftHelloDocs}. While our web-based prototype (using a standard camera and \texttt{face-api.js}) cannot match these hardware-accelerated standards, it aims to follow the same design philosophy: prioritizing a low FAR even at the expense of occasional false rejects.
+\textbf{Windows Hello (IR Facial Login):} Microsoft's Windows Hello face authentication system, which uses infrared imaging, sets stringent hardware requirements with a FAR of less than 0.001\% (i.e., fewer than 1 in 100{,}000 impostor attempts succeed) \autocite{MicrosoftHelloDocs}. In practice, Microsoft reports a FRR under 5\% without liveness detection, and under 10\% when anti-spoofing measures are enabled \autocite{MicrosoftHelloDocs}. The web-based prototype (using a standard camera and \texttt{face-api.js}) cannot match these hardware-accelerated standards, but follows the same design philosophy: prioritizing a low FAR even at the expense of occasional false rejects.
 
 \textbf{Apple Face ID (3D Face Recognition):} Apple's Face ID system also uses 3D infrared facial imaging and targets an extremely low FAR, citing less than 1 in 1{,}000{,}000 chances of unauthorized access \autocite{BentoFaceID}. Although Apple has not disclosed detailed FRR statistics, empirical data suggests that its performance remains highly accurate for legitimate users in normal conditions, despite occasional false rejects caused by sunglasses or facial obstructions. As such, high-end consumer systems aim for FAR values between $10^{-5}$ and $10^{-6}$, while keeping FRR below 10\%.
 
+\clearpage
 \textbf{Academic Benchmarks (FRVT and Others):} Independent evaluations, such as the U.S. National Institute of Standards and Technology (NIST) Face Recognition Vendor Test (FRVT), provide authoritative insight. A top-performing algorithm in FRVT 1:1 verification achieved a false non-match rate of 0.36\% at a FAR of 1 in 1{,}000{,}000 \autocite{ParavisionFRVT}. These results represent optimal conditions; performance degrades in less-controlled environments such as those encountered by webcam-based authentication. Nonetheless, they indicate the capabilities of modern face recognition technologies.
 
 \textbf{Typical Web/Mobile Authentication:} For systems using standard RGB cameras, face recognition APIs such as Microsoft Azure Face and Amazon Rekognition typically report over 99\% true acceptance rates under good conditions \autocite{IJCAFace}. Benchmarks on datasets like LFW (Labeled Faces in the Wild) indicate that many models achieve 99.5\%+ identification accuracy in uncontrolled photographic conditions. The UK National Cyber Security Centre estimates a FAR better than 0.1\% and FRR between 5--10\% for mobile face unlock systems \autocite{BentoFaceID,MicrosoftHelloDocs}.
 
-Using these references, we propose that our prototype should aim for a FAR in the range of $\leq$0.1\% to prevent unauthorized access, while tolerating a FRR of 5--10\% as a reasonable usability trade-off. We conservatively set the matching threshold in our system to favor security, accepting that users may occasionally need to retry under suboptimal conditions.
+Based on these references, the prototype aims for a FAR in the range of $\leq$0.1\% to prevent unauthorized access, while tolerating a FRR of 5--10\% as a reasonable usability trade-off. The matching threshold is set conservatively to favor security, accepting that users may occasionally need to retry under suboptimal conditions.
 
 \section{Usability and Accessibility Standards}
 Accessibility in digital solutions adheres to guidelines such as WCAG, which outline best practices for minimizing cognitive load, ensuring interface clarity, and reducing physical input requirements. Adopting these standards ensures the password manager prototype remains usable for individuals with various disabilities \autocite{Brewer2023}. Inclusive design principles further emphasize the need to involve users with disabilities in the development process to validate and refine usability \autocite{Lazar2015}.

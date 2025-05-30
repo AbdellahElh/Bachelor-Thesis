@@ -36,14 +36,17 @@
 \IfLanguageName{english}{%
 \selectlanguage{dutch}
 \chapter*{Samenvatting}
-De toenemende afhankelijkheid van online diensten heeft het belang van veilig wachtwoordbeheer verder vergroot. Traditionele authenticatiemethoden, zoals het onthouden en intypen van complexe wachtwoorden, vormen vooral voor mensen met cognitieve of motorische beperkingen een aanzienlijke barrière. Dit onderzoek verkent daarom het gebruik van gezichtsherkenning als toegankelijk authenticatiemechanisme binnen een wachtwoordmanager.
+De toenemende afhankelijkheid van online diensten heeft het belang van wachtwoordbeheer in digitale beveiliging versterkt. Traditionele authenticatiemethoden, zoals het invoeren en onthouden van complexe wachtwoorden, vormen vaak aanzienlijke uitdagingen voor personen met cognitieve of motorische beperkingen, waaronder moeilijkheden met geheugen of manuele input. Deze beperkingen onderstrepen de dringende nood aan toegankelijke authenticatieoplossingen die zowel de gebruiksvriendelijkheid als de tevredenheid van de gebruiker verbeteren.
 
-De centrale onderzoeksvraag luidt: \emph{hoe kan gezichtsherkenning de toegankelijkheid van wachtwoordbeheer verbeteren voor mensen met cognitieve en motorische beperkingen}? We analyseerden diverse gezichtsherkennings-API’s in meerdere programmeertalen en kozen uiteindelijk een hybride architectuur: de browser voert de face-detectie uit, versleutelt het beeld met AES-256 en stuurt het naar de server, waar de volledige biometrische verwerking (landmarks, descriptorextractie en matching) plaatsvindt. Zowel de 128-dimensionale descriptors als de versleutelde selfies worden veilig opgeslagen in een SQLite-database via Prisma ORM.
+De centrale onderzoeksvraag luidt: \emph{Hoe kan gezichtsherkenningstechnologie de toegankelijkheid van wachtwoordbeheer verbeteren voor personen met cognitieve en motorische beperkingen?}
 
-Op basis van deze keuze is een webgebaseerd prototype ontwikkeld. Indien dit positieve resultaten oplevert, volgt een browserextensie als vervolgstap om schaalbaarheid en effectiviteit in een realistische context te toetsen. Deze iteratieve aanpak maakt het mogelijk technologieën stapsgewijs en onderbouwd te evalueren voordat tot volledige implementatie wordt overgegaan.
+Het doel van deze bachelorproef is het ontwerpen van een wachtwoordmanager op basis van gezichtsherkenning, specifiek gericht op personen met cognitieve of motorische beperkingen.
 
-Verwachte uitkomsten zijn een aantoonbare daling in cognitieve en fysieke belasting ten opzichte van traditionele wachtwoordmanagers en een hogere gebruikerstevredenheid, terwijl de hybride opzet sterke beveiliging biedt door serverside verificatie en volledige end-to-end-versleuteling.
+Het onderzoek omvat een vergelijkende analyse van verschillende gezichtsherkennings-API’s in diverse programmeertalen om de meest geschikte technologiestack te bepalen. Met de geselecteerde tools werd vervolgens een webgebaseerd prototype van een wachtwoordmanager ontwikkeld. Het prototype volgt een hybride architectuur waarbij de browser verantwoordelijk is voor gezichtsdetectie en client-side versleuteling van de beelden, terwijl de server instaat voor het extraheren van gezichtskenmerken, het uitvoeren van vergelijkingen en het veilig opslaan van de gegevens.
 
+Indien het prototype veelbelovende resultaten oplevert, zal in een vervolgfase een browserextensie ontwikkeld worden om de schaalbaarheid en doeltreffendheid van de gekozen oplossingen in een realistische gebruiksomgeving te evalueren. Deze iteratieve aanpak maakt een gestructureerde evaluatie van de technologieën mogelijk vóór volledige implementatie.
+
+De verwachte resultaten omvatten een verbeterde toegankelijkheid en gebruiksgemak ten opzichte van traditionele wachtwoordbeheerders, wat leidt tot een hogere gebruikerstevredenheid en minder frustratie tijdens het inloggen. Deze studie beoogt het potentieel van gezichtsherkenning aan te tonen om reële toegankelijkheidsproblemen in digitaal identiteitsbeheer aan te pakken, en zo personen met een beperking in staat te stellen hun inloggegevens zelfstandig en veilig te beheren.
 \selectlanguage{english}
 }{}
 
@@ -54,9 +57,11 @@ Verwachte uitkomsten zijn een aantoonbare daling in cognitieve en fysieke belast
 
 The increasing reliance on online services has elevated the importance of password management in digital security. Traditional authentication methods, such as typing and remembering complex passwords, often pose significant challenges for individuals with cognitive or motor disabilities, including difficulties with memory recall or manual input. These limitations highlight the urgent need for accessible authentication solutions that improve both user satisfaction and usability.
 
-This thesis explores the potential of integrating facial recognition technology as an accessible authentication mechanism within password management systems, specifically targeting individuals with cognitive and motor impairments.
+The central research question is: \emph{How can face recognition technology improve accessibility in password management for individuals with cognitive and motor disabilities?} 
 
-The central research question is: \emph{How can face recognition technology improve accessibility in password management for individuals with cognitive and motor disabilities?} The research includes a comparative analysis of various facial recognition APIs across multiple programming languages to determine the most appropriate technology stack for this use case. Based on these findings, a web-based prototype of a password manager was developed using the selected technologies. The prototype follows a hybrid architecture in which the browser executes face detection and client-side encryption of captured images, while the server performs descriptor extraction, matching, and secure storage.
+The objective of this thesis is to design a facial recognition-based password manager specifically aimed at individuals with cognitive or motor impairments.
+
+The research includes a comparative analysis of several facial-recognition APIs across multiple programming languages to determine the best technology stack, and a web-based prototype password manager was then built with the selected tools. The prototype follows a hybrid architecture in which the browser executes face detection and client-side encryption of captured images, while the server performs descriptor extraction, matching, and secure storage.
 
 If the prototype yields promising results, a browser extension will be developed as a follow-up to evaluate the scalability and effectiveness of the selected solutions in a realistic use context. This iterative approach enables a structured evaluation of technologies prior to full implementation.
 

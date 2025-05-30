@@ -1,4 +1,3 @@
-help me add and apply this feedback
 
 - WCAG is referenced repeatedly, yet the thesis does not map each WCAG success criterion to an implementation feature. A small traceability table would make the accessibility argument more auditable.
 - State of the art section: The security-threat section largely addresses spoofing; add references on template extraction attacks and model inversion so you acknowledge risks of storing embeddings, even if encrypted.
@@ -21,7 +20,6 @@ Add a short GDPR compliance paragraph: biometric data are “special category”
 
 State that the prototype is for academic evaluation only and is not production-ready security software.
 
-fix references
 fix placing of imgs
-compare sections with excel doc
 add multer in svz?
+no past tence, instead use active sentences
