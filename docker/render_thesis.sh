@@ -20,13 +20,27 @@ set +x
 for latex_file in ${source_files}; do
   echo "========== Compiling ${latex_file} =========="
   set -x
-  latexmk \
-    -file-line-error \
-    -interaction=nonstopmode \
-    -output-directory="${output_dir}" \
-    -shell-escape \
-    -synctex=1 \
-    -xelatex \
-    "${latex_file}"
+  
+  # Check if this is a poster file - disable biber for posters
+  if [[ "${source_dir}" == "poster" ]]; then
+    latexmk \
+      -file-line-error \
+      -interaction=nonstopmode \
+      -output-directory="${output_dir}" \
+      -shell-escape \
+      -synctex=1 \
+      -xelatex \
+      -bibtex- \
+      "${latex_file}"
+  else
+    latexmk \
+      -file-line-error \
+      -interaction=nonstopmode \
+      -output-directory="${output_dir}" \
+      -shell-escape \
+      -synctex=1 \
+      -xelatex \
+      "${latex_file}"
+  fi
   set +x
 done
